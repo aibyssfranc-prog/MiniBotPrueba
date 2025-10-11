@@ -51,7 +51,9 @@ body{background:url('./IMG_20251011_155158_294.jpg') no-repeat center/cover;disp
     <div class="mining-circle" id="miningCircle">
       <div class="collect-small" id="collectBtn">Collect 1 TPBX</div>
       <div class="mining-icon"></div>
-      <button id="tapBtn" class="tap-btn">⚡ TAP</button>
+      <button id="tapBtn" class="tap-btn">
+        <div class="coin-icon"></div> TAP
+      </button>
     </div>
     <div style="width:100%;display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:8px;">
       <div class="energy-bar"><div id="energyFill" class="energy-fill"></div></div>
@@ -66,121 +68,122 @@ body{background:url('./IMG_20251011_155158_294.jpg') no-repeat center/cover;disp
   <button class="menu-btn" id="profileBtn"><img src="https://cdn-icons-png.flaticon.com/512/747/747376.png"><div style="font-size:11px">Profile</div></button>
 </div>
 
+<!-- SCRIPT INTEGRADO -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-app.js";
 import { getDatabase, ref, set, update, onValue, get, child } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-database.js";
 
-// CONFIG FIREBASE
 const firebaseConfig = {
-  apiKey:"AIzaSyDoNAVJdjlDr6qSj1r8-J1c4F6_k6BDqGw",
-  authDomain:"tapobox-34214.firebaseapp.com",
-  projectId:"tapobox-34214",
-  storageBucket:"tapobox-34214.firebasestorage.app",
-  messagingSenderId:"905512443769",
-  appId:"1:905512443769:web:4d3ffdeca37a3c591659a8"
+    apiKey:"AIzaSyDoNAVJdjlDr6qSj1r8-J1c4F6_k6BDqGw",
+    authDomain:"tapobox-34214.firebaseapp.com",
+    projectId:"tapobox-34214",
+    storageBucket:"tapobox-34214.firebasestorage.app",
+    messagingSenderId:"905512443769",
+    appId:"1:905512443769:web:4d3ffdeca37a3c591659a8"
 };
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// URL params
 const params = new URLSearchParams(window.location.search);
 const tg_id = params.get('tg_id') || ('guest_' + Math.floor(Math.random()*900000+100000));
 const tg_name = params.get('tg_name') || ('Guest_' + tg_id);
-const userPath = 'users/'+tg_id;
+const userPath = 'users/' + tg_id;
 
-// Unique code
-function genUniqueID(){return Math.random().toString(36).substring(2,6).toUpperCase();}
+function genUniqueID(){ return Math.random().toString(36).substring(2,6).toUpperCase(); }
 let userCode = genUniqueID();
 
-// State
-let state={id:tg_id,name:tg_name,total_balance:0,unclaimed:0,energy:100,canTap:true};
+let state = { id: tg_id, name: tg_name, total_balance: 0, unclaimed: 0, energy: 100, canTap: true };
 
-// UI
-const balanceText=document.getElementById('balanceText');
-const smallUnclaimed=document.getElementById('smallUnclaimed');
-const energyFill=document.getElementById('energyFill');
-const tapBtn=document.getElementById('tapBtn');
-const collectBtn=document.getElementById('collectBtn');
-const miningCircle=document.getElementById('miningCircle');
+const balanceText = document.getElementById('balanceText');
+const smallUnclaimed = document.getElementById('smallUnclaimed');
+const energyFill = document.getElementById('energyFill');
+const tapBtn = document.getElementById('tapBtn');
+const collectBtn = document.getElementById('collectBtn');
+const miningCircle = document.getElementById('miningCircle');
+const tapCoinIcon = tapBtn.querySelector('.coin-icon');
 
-// INIT USER AND AUTO REGISTER
-async function initUser(){
-  try{
-    const snap = await get(child(ref(db),userPath));
-    if(!snap.exists()){
-      await set(ref(db,userPath),{
-        id:state.id,
-        name:state.name,
-        userCode:userCode,
-        total_balance:0,
-        unclaimed:0,
-        energy:100,
-        joinedAt:new Date().toISOString()
-      });
-      console.log("Nuevo usuario registrado en Firebase");
-    }else{
-      const u = snap.val();
-      state.total_balance = Number(u.total_balance||0);
-      state.unclaimed = Number(u.unclaimed||0);
-      state.energy = Number(u.energy||100);
-    }
-    onValue(ref(db,userPath),snap=>{
-      if(!snap.exists())return;
-      const val = snap.val();
-      state.total_balance=Number(val.total_balance||0);
-      state.unclaimed=Number(val.unclaimed||0);
-      state.energy=Number(val.energy||100);
-      render();
-    });
-  }catch(e){console.error(e);}
+async function initUser() {
+    try {
+        const snap = await get(child(ref(db), userPath));
+        if(!snap.exists()) {
+            await set(ref(db, userPath), {
+                id: state.id,
+                name: state.name,
+                userCode: userCode,
+                total_balance: 0,
+                unclaimed: 0,
+                energy: 100,
+                joinedAt: new Date().toISOString()
+            });
+        } else {
+            const u = snap.val();
+            state.total_balance = Number(u.total_balance || 0);
+            state.unclaimed = Number(u.unclaimed || 0);
+            state.energy = Number(u.energy || 100);
+        }
+        onValue(ref(db, userPath), snap => {
+            if(!snap.exists()) return;
+            const val = snap.val();
+            state.total_balance = Number(val.total_balance || 0);
+            state.unclaimed = Number(val.unclaimed || 0);
+            state.energy = Number(val.energy || 100);
+            render();
+        });
+    } catch(e) { console.error(e); }
 }
 
-// RENDER
-function render(){
-  balanceText.textContent = state.total_balance.toFixed(8)+" TPBX";
-  smallUnclaimed.textContent = "Unclaimed: "+state.unclaimed.toFixed(8);
-  energyFill.style.width = state.energy+"%";
-  tapBtn.disabled = !state.canTap || state.energy<=0;
-  collectBtn.style.opacity = (state.unclaimed>=1?1:0.45);
-  collectBtn.style.pointerEvents = (state.unclaimed>=1?'auto':'none');
+function render() {
+    balanceText.textContent = state.total_balance.toFixed(8) + " TPBX";
+    smallUnclaimed.textContent = "Unclaimed: " + state.unclaimed.toFixed(8);
+    energyFill.style.width = state.energy + "%";
+    tapBtn.disabled = !state.canTap || state.energy <= 0;
+    collectBtn.style.opacity = (state.unclaimed >= 1 ? 1 : 0.45);
+    collectBtn.style.pointerEvents = (state.unclaimed >= 1 ? 'auto' : 'none');
 }
 
-// TAP
-const TAP_AMOUNT=0.00000001;
-tapBtn.addEventListener('click',()=>{
-  if(!state.canTap||state.energy<=0)return;
-  state.unclaimed+=TAP_AMOUNT;
-  state.energy=Math.max(0,state.energy-0.2);
-  render(); spawnTapCoin();
-  update(ref(db,userPath),{unclaimed:state.unclaimed,energy:state.energy});
+const TAP_AMOUNT = 0.00000001;
+tapBtn.addEventListener('click', () => {
+    if(!state.canTap || state.energy <= 0) return;
+    state.unclaimed += TAP_AMOUNT;
+    state.energy = Math.max(0, state.energy - 0.2);
+    render();
+    animateTapCoin();
+    update(ref(db, userPath), { unclaimed: state.unclaimed, energy: state.energy });
 });
 
-// SPAWN COIN
-function spawnTapCoin(){
-  const coin=document.createElement('div');
-  coin.className='tap-coin';
-  const rect=miningCircle.getBoundingClientRect();
-  coin.style.left=(rect.left+rect.width/2-18)+'px';
-  coin.style.top=(rect.top+rect.height/2-18)+'px';
-  document.body.appendChild(coin);
-  setTimeout(()=>coin.remove(),4200);
+function animateTapCoin() {
+    tapCoinIcon.style.transform = 'scale(1.2) rotate(15deg)';
+    tapCoinIcon.style.filter = 'drop-shadow(0 0 12px rgba(0,255,255,0.8))';
+    setTimeout(() => {
+        tapCoinIcon.style.transform = 'scale(1) rotate(0deg)';
+        tapCoinIcon.style.filter = 'drop-shadow(0 6px 18px rgba(0,0,0,0.18))';
+    }, 200);
+
+    const coin = document.createElement('div');
+    coin.className = 'tap-coin';
+    const rect = miningCircle.getBoundingClientRect();
+    coin.style.left = (rect.left + rect.width / 2 - 18) + 'px';
+    coin.style.top = (rect.top + rect.height / 2 - 18) + 'px';
+    document.body.appendChild(coin);
+    setTimeout(() => coin.remove(), 4200);
 }
 
-// COLLECT
-collectBtn.addEventListener('click',async()=>{
-  if(state.unclaimed<1)return;
-  state.unclaimed-=1; state.total_balance+=1;
-  await update(ref(db,userPath),{total_balance:state.total_balance,unclaimed:state.unclaimed});
-  render(); alert("Collected 1 TPBX!");
+collectBtn.addEventListener('click', async () => {
+    if(state.unclaimed < 1) return;
+    state.unclaimed -= 1;
+    state.total_balance += 1;
+    await update(ref(db, userPath), { total_balance: state.total_balance, unclaimed: state.unclaimed });
+    render();
+    alert("Collected 1 TPBX!");
 });
 
-// NAV
-document.getElementById('profileBtn').addEventListener('click',()=>{window.location.href=`perfil.html?tg_id=${state.id}&tg_name=${state.name}&userCode=${userCode}`;});
-document.getElementById('minersBtn').addEventListener('click',()=>{alert("Miners page coming soon");});
-document.getElementById('refsBtn').addEventListener('click',()=>{alert("Referrals page coming soon");});
-document.getElementById('tasksBtn').addEventListener('click',()=>{alert("Tasks page coming soon");});
+document.getElementById('profileBtn').addEventListener('click', () => {
+    window.location.href = `perfil.html?tg_id=${state.id}&tg_name=${state.name}&userCode=${userCode}`;
+});
+document.getElementById('minersBtn').addEventListener('click', () => { alert("Miners page coming soon"); });
+document.getElementById('refsBtn').addEventListener('click', () => { alert("Referrals page coming soon"); });
+document.getElementById('tasksBtn').addEventListener('click', () => { alert("Tasks page coming soon"); });
 
-// START
 initUser();
 </script>
 </body>
