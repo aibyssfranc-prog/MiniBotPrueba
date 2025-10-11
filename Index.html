@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TapoBotX — Initializing</title>
+  <title>TapoBotX — System Loading</title>
   <style>
     * {
       margin: 0;
@@ -12,16 +12,41 @@
     }
 
     body {
-      background: radial-gradient(circle at center, #00111f, #000814);
-      color: #00eaff;
-      font-family: 'Orbitron', sans-serif;
+      height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 100vh;
       overflow: hidden;
+      background: radial-gradient(circle at center, #00121f, #000814 70%);
+      color: #00eaff;
+      font-family: 'Orbitron', sans-serif;
       text-align: center;
+      position: relative;
+    }
+
+    /* === FONDO ANIMADO === */
+    .animated-bg {
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(0, 234, 255, 0.08) 0%, transparent 70%);
+      animation: moveBg 6s linear infinite alternate;
+      filter: blur(60px);
+      z-index: 0;
+    }
+
+    @keyframes moveBg {
+      0% { transform: translate(-25%, -25%) scale(1); }
+      100% { transform: translate(25%, 25%) scale(1.2); }
+    }
+
+    /* === LOGO / ROBOT === */
+    .logo {
+      width: 180px;
+      max-width: 80%;
+      z-index: 2;
+      animation: fadeIn 2s ease forwards;
     }
 
     @keyframes fadeIn {
@@ -29,49 +54,49 @@
       to { opacity: 1; transform: scale(1); }
     }
 
-    .logo {
-      width: 180px;
-      animation: fadeIn 2s ease forwards;
-      margin-bottom: 20px;
-    }
-
+    /* === TEXTO === */
     .text {
+      margin-top: 25px;
       font-size: 1.2rem;
       letter-spacing: 2px;
-      animation: fadeIn 2s ease forwards 2s;
+      animation: fadeIn 2s ease forwards 1.5s;
+      z-index: 2;
     }
 
-    .dots {
-      margin-top: 10px;
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      animation: fadeIn 2s ease forwards 2.5s;
-    }
-
-    .dot {
-      width: 10px;
+    /* === BARRA DE CARGA === */
+    .progress-container {
+      width: 80%;
+      max-width: 300px;
       height: 10px;
-      border-radius: 50%;
+      background-color: rgba(0, 234, 255, 0.2);
+      border-radius: 20px;
+      margin-top: 25px;
+      overflow: hidden;
+      z-index: 2;
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
       background-color: #00eaff;
-      opacity: 0.4;
-      animation: blink 1.2s infinite;
+      border-radius: 20px;
+      animation: loadBar 5s linear forwards;
     }
 
-    .dot:nth-child(2) { animation-delay: 0.2s; }
-    .dot:nth-child(3) { animation-delay: 0.4s; }
-
-    @keyframes blink {
-      50% { opacity: 1; }
+    @keyframes loadBar {
+      0% { width: 0%; }
+      100% { width: 100%; }
     }
 
+    /* === REDES SOCIALES === */
     .social-buttons {
       margin-top: 40px;
       display: flex;
       gap: 15px;
       flex-wrap: wrap;
       justify-content: center;
-      animation: fadeIn 2s ease forwards 3s;
+      z-index: 2;
+      animation: fadeIn 2s ease forwards 2s;
     }
 
     .social-buttons a {
@@ -89,13 +114,10 @@
       color: #000814;
     }
 
+    /* === MOBILE === */
     @media (max-width: 480px) {
-      .logo {
-        width: 140px;
-      }
-      .text {
-        font-size: 1rem;
-      }
+      .logo { width: 140px; }
+      .text { font-size: 1rem; }
       .social-buttons a {
         padding: 8px 20px;
         font-size: 0.9rem;
@@ -104,26 +126,30 @@
   </style>
 </head>
 <body>
-  <img src="https://github.com/user-attachments/assets/41f7fc9e-363f-4d1a-b346-7c601653c810" alt="TapoBotX Logo" class="logo" id="logo" />
+  <div class="animated-bg"></div>
 
-  <div class="text" id="loadingText">INITIALIZING TAPOBOTX SYSTEM<br><small>Please wait...</small></div>
+  <img 
+    src="https://github.com/user-attachments/assets/67875c55-4a09-47c8-8241-bc14d1716c09" 
+    alt="TapoBotX Logo" 
+    class="logo"
+  />
 
-  <div class="dots">
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
+  <div class="text">INITIALIZING TAPOBOTX SYSTEM...</div>
+
+  <div class="progress-container">
+    <div class="progress-bar"></div>
   </div>
 
   <div class="social-buttons">
-    <a href="" target="_blank">Facebook</a>
-    <a href="" target="_blank">YouTube</a>
-    <a href="" target="_blank">TikTok</a>
+    <a href="https://facebook.com" target="_blank">Facebook</a>
+    <a href="https://youtube.com" target="_blank">YouTube</a>
+    <a href="https://tiktok.com" target="_blank">TikTok</a>
   </div>
 
   <script>
-    // Simulación de carga con animación de 3 segundos
+    // Espera 5 segundos y redirige a Launchpool
     setTimeout(() => {
-      document.getElementById('loadingText').innerHTML = "Welcome to <strong>TapoBotX Launchpool</strong>";
+      window.location.href = "launchpool.html";
     }, 5000);
   </script>
 </body>
