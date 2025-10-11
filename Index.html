@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" 
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>TapoBotX — Coming Soon</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TapoBotX — Loading</title>
 <style>
   html, body {
     margin: 0;
@@ -14,184 +12,214 @@
     height: 100%;
     overflow: hidden;
     font-family: "Poppins", sans-serif;
-    color: #0a3d62;
-    background: linear-gradient(to bottom, #8ed0ff, #b9e3ff);
-    position: relative;
-    touch-action: none;
-  }
-
-  /* Fondo animado de nubes */
-  .cloud {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 200%;
-    height: 100%;
-    background: url('https://i.ibb.co/4ZpP7Hd/clouds.png') repeat-x;
-    background-size: contain;
-    animation: moveClouds 60s linear infinite;
-    opacity: 0.5;
-    z-index: 0;
-  }
-
-  @keyframes moveClouds {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-
-  /* Contenedor principal centrado */
-  .container {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    height: 100%;
+    background: #000;
+    color: #fff8dc;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
   }
 
-  /* Contador de usuarios */
-  .counter {
+  /* Fondo animado */
+  .mine-bg {
     position: absolute;
-    top: 15px;
-    font-weight: 600;
-    font-size: 16px;
-    background: rgba(255, 255, 255, 0.8);
-    padding: 6px 16px;
-    border-radius: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    inset: 0;
+    background: url('./mine-gold-bg.png') no-repeat center center fixed;
+    background-size: cover;
+    z-index: 0;
+    animation: bgMove 20s ease-in-out infinite alternate;
   }
 
-  /* Logo flotante */
+  @keyframes bgMove {
+    0% { filter: brightness(1) contrast(1); transform: scale(1);}
+    100% { filter: brightness(1.25) contrast(1.2); transform: scale(1.03);}
+  }
+
+  /* Contenedor de monedas */
+  .coins {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .coin {
+    position: absolute;
+    opacity: 0.9;
+    animation: rotate3D 20s linear infinite, floatAround 25s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 10px gold);
+    transform-style: preserve-3d;
+  }
+
+  @keyframes rotate3D {
+    0% { transform: rotateY(0deg) rotateX(0deg) scale(1); }
+    50% { transform: rotateY(180deg) rotateX(15deg) scale(1.05); }
+    100% { transform: rotateY(360deg) rotateX(0deg) scale(1); }
+  }
+
+  @keyframes floatAround {
+    0% { transform: translate(var(--start-x), var(--start-y)); }
+    100% { transform: translate(var(--end-x), var(--end-y)); }
+  }
+
+  /* Logo */
   .logo {
     width: 160px;
     max-width: 60%;
+    z-index: 2;
+    filter: drop-shadow(0 0 10px gold);
     animation: float 3s ease-in-out infinite;
   }
 
   @keyframes float {
-    0%, 100% { transform: translateY(0); }
+    0%,100% { transform: translateY(0); }
     50% { transform: translateY(-10px); }
   }
 
-  /* Texto principal */
-  h1 {
-    margin-top: 25px;
-    font-size: 24px;
-    letter-spacing: 3px;
-    font-weight: 700;
+  /* Texto de carga */
+  .loading-text {
+    margin-top: 20px;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px #ffcc00;
+    z-index: 2;
   }
 
-  /* Redes sociales */
+  /* Barra de carga */
+  .progress-container {
+    width: 300px;
+    max-width: 80%;
+    height: 20px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 15px;
+    margin-top: 15px;
+    overflow: hidden;
+    z-index: 2;
+  }
+
+  .progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #FFD43B, #ffb300);
+    border-radius: 15px;
+    transition: width 0.05s linear;
+  }
+
+  /* Redes sociales abajo */
   .socials {
-    margin-top: 25px;
+    position: absolute;
+    bottom: 20px;
     display: flex;
     gap: 18px;
+    z-index: 2;
   }
 
   .socials a {
-    width: 55px;
-    height: 55px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
-    background: white;
+    background: rgba(255,255,255,0.95);
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    transition: transform 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
-  .socials a:active {
-    transform: scale(0.95);
+  .socials a:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px gold;
   }
 
   .socials img {
     width: 28px;
   }
-
-  /* Telegram buttons */
-  .telegram-links {
-    margin-top: 25px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .telegram-links a {
-    text-decoration: none;
-    background: #229ED9;
-    color: white;
-    font-weight: 600;
-    padding: 10px 30px;
-    border-radius: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    transition: background 0.3s ease, transform 0.3s ease;
-  }
-
-  .telegram-links a:active {
-    background: #1b8fc7;
-    transform: translateY(2px);
-  }
-
-  .telegram-links img {
-    width: 20px;
-  }
 </style>
 </head>
-
 <body>
-  <div class="cloud"></div>
 
-  <div class="container">
-    <div class="counter">
-      👥 <span id="userCount">0</span> users joined
-    </div>
+<div class="mine-bg"></div>
+<div class="coins" id="coins"></div>
 
-    <img src="https://github.com/user-attachments/assets/02ae68fc-3e99-41b7-8623-b84701da92ec" 
-         alt="TapoBotX Logo" 
-         class="logo">
+<img src="https://github.com/user-attachments/assets/549c6c5d-bfbe-4edd-8944-9d32bb3398f2" alt="TapoBotX Logo" class="logo">
 
-    <h1>COMING SOON...</h1>
+<div class="loading-text">Loading your bot...</div>
 
-    <div class="socials">
-      <a href="https://facebook.com" target="_blank">
-        <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook">
-      </a>
-      <a href="https://youtube.com" target="_blank">
-        <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube">
-      </a>
-      <a href="https://tiktok.com" target="_blank">
-        <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" alt="TikTok">
-      </a>
-    </div>
+<div class="progress-container">
+  <div class="progress-bar" id="progress-bar"></div>
+</div>
 
-    <div class="telegram-links">
-      <a href="https://t.me/TapoBotXNews" target="_blank">
-        📰 Join TapoBotX News
-      </a>
-      <a href="https://t.me/TapoBotXChat" target="_blank">
-        💬 Join TapoBotX Chat
-      </a>
-    </div>
-  </div>
+<div class="socials">
+  <a href="https://facebook.com" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook">
+  </a>
+  <a href="https://youtube.com" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube">
+  </a>
+  <a href="https://tiktok.com" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" alt="TikTok">
+  </a>
+</div>
 
-  <script>
-    // Simulación del contador de usuarios
-    let count = 1420;
-    const countEl = document.getElementById('userCount');
+<script>
+  // Crear monedas flotantes
+  const coinsContainer = document.getElementById('coins');
+  const coinSrc = "./1000066477-removebg-preview.png";
+  const totalCoins = 12;
 
-    setInterval(() => {
-      count += Math.floor(Math.random() * 3) + 1;
-      countEl.textContent = count.toLocaleString();
-    }, 2000);
+  function randomRange(min, max) {
+    return Math.random() * (max - min) + min;
+  }
 
-    // Bloquear desplazamiento con gestos táctiles
-    document.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
-  </script>
+  for (let i = 0; i < totalCoins; i++) {
+    const coin = document.createElement("img");
+    coin.src = coinSrc;
+    coin.className = "coin";
+
+    const startX = randomRange(-10, 100) + "vw";
+    const startY = randomRange(-10, 100) + "vh";
+    const endX = randomRange(-10, 100) + "vw";
+    const endY = randomRange(-10, 100) + "vh";
+
+    coin.style.setProperty("--start-x", startX);
+    coin.style.setProperty("--start-y", startY);
+    coin.style.setProperty("--end-x", endX);
+    coin.style.setProperty("--end-y", endY);
+
+    coin.style.width = (35 + Math.random() * 25) + "px";
+    coin.style.animationDuration = (20 + Math.random() * 15) + "s";
+    coin.style.animationDelay = Math.random() * 5 + "s";
+
+    coinsContainer.appendChild(coin);
+  }
+
+  // Actualizar posiciones de monedas cada 20s
+  setInterval(() => {
+    document.querySelectorAll('.coin').forEach(coin => {
+      const endX = randomRange(-10, 100) + "vw";
+      const endY = randomRange(-10, 100) + "vh";
+      coin.style.setProperty("--start-x", coin.style.getPropertyValue("--end-x"));
+      coin.style.setProperty("--start-y", coin.style.getPropertyValue("--end-y"));
+      coin.style.setProperty("--end-x", endX);
+      coin.style.setProperty("--end-y", endY);
+    });
+  }, 20000);
+
+  // Barra de carga 5 segundos
+  const progressBar = document.getElementById('progress-bar');
+  let width = 0;
+  const interval = setInterval(() => {
+    if (width >= 100) {
+      clearInterval(interval);
+      window.location.href = "https://t.me/TapoBotXChat";
+    } else {
+      width += 1;
+      progressBar.style.width = width + "%";
+    }
+  }, 50);
+</script>
+
 </body>
 </html>
