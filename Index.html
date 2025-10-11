@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport"
+<meta name="viewport" 
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>TapoBotX — Coming Soon</title>
 
@@ -14,80 +14,61 @@
     height: 100%;
     overflow: hidden;
     font-family: "Poppins", sans-serif;
-    color: #0a3d62;
-    background: linear-gradient(to bottom, #8ed0ff, #b9e3ff);
+    color: #fff8dc;
+    background: #000;
     position: relative;
     touch-action: none;
   }
 
-  /* Fondo animado de nubes */
-  .cloud {
+  /* Fondo animado tipo cueva minera dorada */
+  .mine-bg {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 300%;
-    height: 100%;
-    background: url('./1000066460-removebg-preview.png') repeat-x;
-    background-size: 1000px auto;
-    animation: moveClouds 80s linear infinite;
-    opacity: 0.8;
+    inset: 0;
+    background: url('./mine-gold-bg.png') no-repeat center center fixed;
+    background-size: cover;
+    animation: bgMove 20s ease-in-out infinite alternate;
     z-index: 0;
-    filter: brightness(1.2);
   }
 
-  @keyframes moveClouds {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
+  @keyframes bgMove {
+    0% { filter: brightness(1) contrast(1); transform: scale(1);}
+    100% { filter: brightness(1.25) contrast(1.2); transform: scale(1.03);}
   }
 
-  /* ==== MONEDAS FLOTANTES ABAJO ==== */
-  .bottom-coin {
+  /* Monedas animadas */
+  .coins {
     position: absolute;
-    bottom: 20px;
-    width: 45px;
-    height: 45px;
-    z-index: 1;
-    opacity: 0.9;
-    animation: floatCoin 4s ease-in-out infinite;
-  }
-
-  @keyframes floatCoin {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-10px) rotate(15deg); }
-  }
-
-  /* ==== MONEDAS EN EL CENTRO (CAMBIAN POSICIÓN) ==== */
-  .floating-coin {
-    position: absolute;
-    width: 55px;
+    inset: 0;
     z-index: 2;
-    opacity: 0.85;
-    transition: all 3s ease-in-out;
-    animation: gentleSpin 6s linear infinite;
+    pointer-events: none;
+    overflow: hidden;
   }
 
-  @keyframes gentleSpin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-
-  /* ==== LLUVIA DE MONEDAS TRBX ==== */
-  .rain-coin {
+  .coin {
     position: absolute;
-    top: -60px;
-    width: 40px;
-    height: 40px;
-    z-index: 1;
-    opacity: 0.8;
-    animation: fall 5s linear forwards;
+    width: 50px;
+    opacity: 0.85;
+    animation: fall 8s linear infinite, rotate 4s ease-in-out infinite alternate, glow 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 8px gold);
   }
 
   @keyframes fall {
-    from { transform: translateY(0); opacity: 1; }
-    to { transform: translateY(120vh); opacity: 0; }
+    0% { transform: translateY(-120px) rotate(0deg); opacity: 0; }
+    20% { opacity: 1; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
   }
 
-  /* Contenedor principal centrado */
+  @keyframes rotate {
+    0% { transform: rotateY(0deg) scale(1); }
+    100% { transform: rotateY(360deg) scale(1.1); }
+  }
+
+  @keyframes glow {
+    0%,100% { filter: drop-shadow(0 0 8px gold) brightness(1.2); }
+    50% { filter: drop-shadow(0 0 15px #ffea75) brightness(1.4); }
+  }
+
+  /* Contenedor principal */
   .container {
     position: relative;
     z-index: 3;
@@ -105,9 +86,7 @@
     max-width: 60%;
     animation: float 3s ease-in-out infinite;
     z-index: 3;
-    border-radius: 50%;
-    mix-blend-mode: multiply;
-    filter: brightness(1.1) drop-shadow(0 0 10px rgba(0, 0, 0, 0.2));
+    filter: drop-shadow(0 0 10px gold);
   }
 
   @keyframes float {
@@ -115,13 +94,16 @@
     50% { transform: translateY(-10px); }
   }
 
+  /* Texto principal */
   h1 {
     margin-top: 25px;
-    font-size: 24px;
+    font-size: 26px;
     letter-spacing: 3px;
     font-weight: 700;
+    text-shadow: 0 0 15px #ffcc00;
   }
 
+  /* Redes sociales */
   .socials {
     margin-top: 25px;
     display: flex;
@@ -132,47 +114,49 @@
     width: 55px;
     height: 55px;
     border-radius: 50%;
-    background: white;
+    background: rgba(255, 255, 255, 0.95);
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    transition: transform 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
-  .socials a:active {
-    transform: scale(0.95);
+  .socials a:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px gold;
   }
 
   .socials img {
     width: 28px;
   }
 
+  /* Botones Telegram */
   .telegram-links {
     margin-top: 25px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
   }
 
   .telegram-links a {
     text-decoration: none;
-    background: #229ED9;
-    color: white;
-    font-weight: 600;
-    padding: 10px 30px;
+    background: linear-gradient(90deg, #FFD43B, #ffb300);
+    color: #222;
+    font-weight: 700;
+    padding: 12px 30px;
     border-radius: 25px;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    transition: background 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
   }
 
   .telegram-links a:active {
-    background: #1b8fc7;
-    transform: translateY(2px);
+    transform: scale(0.96);
+    box-shadow: 0 0 12px gold;
   }
 
   .telegram-links img {
@@ -182,31 +166,12 @@
 </head>
 
 <body>
-  <div class="cloud"></div>
-
-  <!-- Monedas fijas flotando abajo -->
-  <img src="./1000066460-removebg-preview.png" class="bottom-coin" style="left: 5%;" />
-  <img src="./1000066460-removebg-preview.png" class="bottom-coin" style="left: 20%;" />
-  <img src="./1000066460-removebg-preview.png" class="bottom-coin" style="left: 35%;" />
-  <img src="./1000066460-removebg-preview.png" class="bottom-coin" style="left: 50%;" />
-  <img src="./1000066460-removebg-preview.png" class="bottom-coin" style="left: 65%;" />
-  <img src="./1000066460-removebg-preview.png" class="bottom-coin" style="left: 75%;" />
-  <img src="./1000066460-removebg-preview.png" class="bottom-coin" style="left: 85%;" />
-  <img src="./1000066460-removebg-preview.png" class="bottom-coin" style="left: 95%;" />
-
-  <!-- Monedas dinámicas en el centro -->
-  <img src="./1000066460-removebg-preview.png" class="floating-coin" id="coin1" />
-  <img src="./1000066460-removebg-preview.png" class="floating-coin" id="coin2" />
-  <img src="./1000066460-removebg-preview.png" class="floating-coin" id="coin3" />
-  <img src="./1000066460-removebg-preview.png" class="floating-coin" id="coin4" />
-  <img src="./1000066460-removebg-preview.png" class="floating-coin" id="coin5" />
-  <img src="./1000066460-removebg-preview.png" class="floating-coin" id="coin6" />
-  <img src="./1000066460-removebg-preview.png" class="floating-coin" id="coin7" />
-  <img src="./1000066460-removebg-preview.png" class="floating-coin" id="coin8" />
+  <div class="mine-bg"></div>
+  <div class="coins" id="coins"></div>
 
   <div class="container">
-    <img src="https://github.com/user-attachments/assets/549c6c5d-bfbe-4edd-8944-9d32bb3398f2"
-         alt="TapoBotX Logo"
+    <img src="https://github.com/user-attachments/assets/549c6c5d-bfbe-4edd-8944-9d32bb3398f2" 
+         alt="TapoBotX Logo" 
          class="logo">
 
     <h1>COMING SOON...</h1>
@@ -224,46 +189,47 @@
     </div>
 
     <div class="telegram-links">
-      <a href="https://t.me/TapoBotXNews" target="_blank">
-        📰 Join TapoBotX News
-      </a>
-      <a href="https://t.me/TapoBotXChat" target="_blank">
-        💬 Join TapoBotX Chat
-      </a>
+      <a href="https://t.me/TapoBotXNews" target="_blank">📰 Join TapoBotX News</a>
+      <a href="https://t.me/TapoBotXChat" target="_blank">💬 Join TapoBotX Chat</a>
     </div>
   </div>
 
   <script>
-    // === CAMBIO DE POSICIÓN DE MONEDAS CENTRALES ===
-    const floatingCoins = document.querySelectorAll('.floating-coin');
+    const coinsContainer = document.getElementById('coins');
+    const coinSrc = "./1000066477-removebg-preview.png";
+    const totalCoins = 8;
+    const coins = [];
 
-    function moveFloatingCoins() {
-      floatingCoins.forEach(coin => {
-        const x = 10 + Math.random() * 80; // margen lateral
-        const y = 30 + Math.random() * 20; // altura del centro
-        coin.style.left = x + 'vw';
-        coin.style.top = y + 'vh';
+    // Crear monedas iniciales
+    for (let i = 0; i < totalCoins; i++) {
+      const coin = document.createElement("img");
+      coin.src = coinSrc;
+      coin.className = "coin";
+      coin.style.left = Math.random() * 100 + "vw";
+      coin.style.animationDuration = (6 + Math.random() * 4) + "s";
+      coin.style.width = (35 + Math.random() * 25) + "px";
+      coin.style.opacity = 0.7 + Math.random() * 0.3;
+      coinsContainer.appendChild(coin);
+      coins.push(coin);
+    }
+
+    // Mover monedas a nuevas posiciones cada 5 segundos
+    setInterval(() => {
+      coins.forEach(coin => {
+        coin.style.left = Math.random() * 100 + "vw";
       });
-    }
+    }, 5000);
 
-    moveFloatingCoins();
-    setInterval(moveFloatingCoins, 5000);
-
-    // === LLUVIA DE MONEDAS TRBX ===
-    function createRainCoin() {
-      const coin = document.createElement('img');
-      coin.src = './1000066477-removebg-preview.png';
-      coin.classList.add('rain-coin');
-      coin.style.left = Math.random() * 100 + '%';
-      coin.style.width = (30 + Math.random() * 20) + 'px';
-      document.body.appendChild(coin);
-      setTimeout(() => coin.remove(), 5000);
-    }
-
-    setInterval(createRainCoin, 15000);
-
-    // Bloquear desplazamiento táctil
-    document.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+    // Crear nuevas monedas cayendo cada 15 segundos
+    setInterval(() => {
+      const fallingCoin = document.createElement("img");
+      fallingCoin.src = coinSrc;
+      fallingCoin.className = "coin";
+      fallingCoin.style.left = Math.random() * 100 + "vw";
+      fallingCoin.style.animationDuration = (6 + Math.random() * 4) + "s";
+      coinsContainer.appendChild(fallingCoin);
+      setTimeout(() => fallingCoin.remove(), 10000);
+    }, 15000);
   </script>
 </body>
 </html>
