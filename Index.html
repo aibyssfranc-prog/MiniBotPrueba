@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" 
+<meta name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>TapoBotX — Coming Soon</title>
 
@@ -32,7 +32,6 @@
     animation: moveClouds 80s linear infinite;
     opacity: 0.8;
     z-index: 0;
-    background-color: transparent;
     filter: brightness(1.2);
   }
 
@@ -41,55 +40,51 @@
     to { transform: translateX(-50%); }
   }
 
-  /* Fondo tipo cueva minera */
-  .mine-bg {
+  /* ==== MONEDAS FLOTANTES ABAJO ==== */
+  .bottom-coin {
     position: absolute;
-    inset: 0;
+    bottom: 20px;
+    width: 45px;
+    height: 45px;
     z-index: 1;
-    background: radial-gradient(circle at bottom, #3a2a1b 0%, #1c120a 80%);
-    overflow: hidden;
-    animation: glow 6s ease-in-out infinite alternate;
+    opacity: 0.9;
+    animation: floatCoin 4s ease-in-out infinite;
   }
 
-  @keyframes glow {
-    0% { filter: brightness(1) saturate(1.1); }
-    100% { filter: brightness(1.2) saturate(1.4); }
+  @keyframes floatCoin {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(15deg); }
   }
 
-  /* Monedas flotando y cayendo */
-  .coins {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    pointer-events: none;
-    overflow: hidden;
-  }
-
-  .coin {
+  /* ==== MONEDAS EN EL CENTRO (CAMBIAN POSICIÓN) ==== */
+  .floating-coin {
     position: absolute;
     width: 55px;
-    opacity: 0.9;
-    animation: fall 8s linear infinite, spin 6s linear infinite;
-    filter: drop-shadow(0 0 8px gold);
+    z-index: 2;
+    opacity: 0.85;
+    transition: all 3s ease-in-out;
+    animation: gentleSpin 6s linear infinite;
+  }
+
+  @keyframes gentleSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* ==== LLUVIA DE MONEDAS TRBX ==== */
+  .rain-coin {
+    position: absolute;
+    top: -60px;
+    width: 40px;
+    height: 40px;
+    z-index: 1;
+    opacity: 0.8;
+    animation: fall 5s linear forwards;
   }
 
   @keyframes fall {
-    0% {
-      transform: translateY(-100px) rotate(0deg);
-      opacity: 0;
-    }
-    20% {
-      opacity: 1;
-    }
-    100% {
-      transform: translateY(110vh) rotate(360deg);
-      opacity: 0;
-    }
-  }
-
-  @keyframes spin {
-    from { transform: rotateY(0deg); }
-    to { transform: rotateY(360deg); }
+    from { transform: translateY(0); opacity: 1; }
+    to { transform: translateY(120vh); opacity: 0; }
   }
 
   /* Contenedor principal centrado */
@@ -104,26 +99,13 @@
     align-items: center;
   }
 
-  /* Contador de usuarios */
-  .counter {
-    position: absolute;
-    top: 15px;
-    font-weight: 600;
-    font-size: 16px;
-    background: rgba(255, 255, 255, 0.8);
-    padding: 6px 16px;
-    border-radius: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  }
-
-  /* Logo sin fondo visible */
+  /* Logo */
   .logo {
     width: 160px;
     max-width: 60%;
     animation: float 3s ease-in-out infinite;
     z-index: 3;
     border-radius: 50%;
-    background: transparent;
     mix-blend-mode: multiply;
     filter: brightness(1.1) drop-shadow(0 0 10px rgba(0, 0, 0, 0.2));
   }
@@ -133,7 +115,6 @@
     50% { transform: translateY(-10px); }
   }
 
-  /* Texto principal */
   h1 {
     margin-top: 25px;
     font-size: 24px;
@@ -141,7 +122,6 @@
     font-weight: 700;
   }
 
-  /* Redes sociales */
   .socials {
     margin-top: 25px;
     display: flex;
@@ -168,7 +148,6 @@
     width: 28px;
   }
 
-  /* Telegram buttons */
   .telegram-links {
     margin-top: 25px;
     display: flex;
@@ -199,64 +178,35 @@
   .telegram-links img {
     width: 20px;
   }
-
-  /* Botón copiar enlace */
-  .copy-link {
-    margin-top: 25px;
-  }
-  .copy-link button {
-    background: #FFD43B;
-    color: #222;
-    border: none;
-    padding: 10px 25px;
-    border-radius: 25px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
-  }
-  .copy-link button:hover {
-    background: #f7c800;
-    transform: scale(1.05);
-  }
-
-  /* Notificación flotante */
-  #copyMessage {
-    display: none;
-    position: fixed;
-    bottom: 25px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #28a745;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-weight: 600;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    z-index: 999;
-    animation: fadeInOut 2s ease;
-  }
-
-  @keyframes fadeInOut {
-    0%,100% { opacity: 0; }
-    20%,80% { opacity: 1; }
-  }
 </style>
 </head>
 
 <body>
   <div class="cloud"></div>
-  <div class="mine-bg"></div>
 
-  <!-- Monedas flotando y cayendo -->
-  <div class="coins" id="coins"></div>
+  <!-- Monedas fijas flotando abajo -->
+  <img src="./1000066460-removebg-preview.png" class="bottom-coin" style="left: 5%;" />
+  <img src="./1000066460-removebg-preview.png" class="bottom-coin" style="left: 20%;" />
+  <img src="./1000066460-removebg-preview.png" class="bottom-coin" style="left: 35%;" />
+  <img src="./1000066460-removebg-preview.png" class="bottom-coin" style="left: 50%;" />
+  <img src="./1000066460-removebg-preview.png" class="bottom-coin" style="left: 65%;" />
+  <img src="./1000066460-removebg-preview.png" class="bottom-coin" style="left: 75%;" />
+  <img src="./1000066460-removebg-preview.png" class="bottom-coin" style="left: 85%;" />
+  <img src="./1000066460-removebg-preview.png" class="bottom-coin" style="left: 95%;" />
+
+  <!-- Monedas dinámicas en el centro -->
+  <img src="./1000066460-removebg-preview.png" class="floating-coin" id="coin1" />
+  <img src="./1000066460-removebg-preview.png" class="floating-coin" id="coin2" />
+  <img src="./1000066460-removebg-preview.png" class="floating-coin" id="coin3" />
+  <img src="./1000066460-removebg-preview.png" class="floating-coin" id="coin4" />
+  <img src="./1000066460-removebg-preview.png" class="floating-coin" id="coin5" />
+  <img src="./1000066460-removebg-preview.png" class="floating-coin" id="coin6" />
+  <img src="./1000066460-removebg-preview.png" class="floating-coin" id="coin7" />
+  <img src="./1000066460-removebg-preview.png" class="floating-coin" id="coin8" />
 
   <div class="container">
-    <div class="counter">
-      👥 <span id="userCount">0</span> users joined
-    </div>
-
-    <img src="https://github.com/user-attachments/assets/549c6c5d-bfbe-4edd-8944-9d32bb3398f2" 
-         alt="TapoBotX Logo" 
+    <img src="https://github.com/user-attachments/assets/549c6c5d-bfbe-4edd-8944-9d32bb3398f2"
+         alt="TapoBotX Logo"
          class="logo">
 
     <h1>COMING SOON...</h1>
@@ -281,54 +231,39 @@
         💬 Join TapoBotX Chat
       </a>
     </div>
-
-    <!-- Botón copiar enlace -->
-    <div class="copy-link">
-      <button onclick="copyBotLink()">📋 Copiar enlace del bot</button>
-    </div>
   </div>
 
-  <div id="copyMessage">✅ Enlace copiado</div>
-
   <script>
-    // Simulación del contador de usuarios
-    let count = 1420;
-    const countEl = document.getElementById('userCount');
-    setInterval(() => {
-      count += Math.floor(Math.random() * 3) + 1;
-      countEl.textContent = count.toLocaleString();
-    }, 2000);
+    // === CAMBIO DE POSICIÓN DE MONEDAS CENTRALES ===
+    const floatingCoins = document.querySelectorAll('.floating-coin');
 
-    // Copiar enlace al portapapeles
-    function copyBotLink() {
-      const botLink = "https://t.me/TapoBotX_Bot";
-      navigator.clipboard.writeText(botLink);
-      const msg = document.getElementById('copyMessage');
-      msg.style.display = 'block';
-      setTimeout(() => msg.style.display = 'none', 2000);
+    function moveFloatingCoins() {
+      floatingCoins.forEach(coin => {
+        const x = 10 + Math.random() * 80; // margen lateral
+        const y = 30 + Math.random() * 20; // altura del centro
+        coin.style.left = x + 'vw';
+        coin.style.top = y + 'vh';
+      });
     }
 
-    // Generar lluvia de monedas TPBX
-    const coinsContainer = document.getElementById('coins');
-    const coinSrc = "./1000066477-removebg-preview.png";
+    moveFloatingCoins();
+    setInterval(moveFloatingCoins, 5000);
 
-    function createCoin() {
-      const coin = document.createElement("img");
-      coin.src = coinSrc;
-      coin.className = "coin";
-      coin.style.left = Math.random() * 100 + "vw";
-      coin.style.animationDuration = (6 + Math.random() * 4) + "s";
-      coin.style.width = (40 + Math.random() * 30) + "px";
-      coin.style.opacity = 0.7 + Math.random() * 0.3;
-      coinsContainer.appendChild(coin);
-
-      setTimeout(() => coin.remove(), 8000);
+    // === LLUVIA DE MONEDAS TRBX ===
+    function createRainCoin() {
+      const coin = document.createElement('img');
+      coin.src = './1000066477-removebg-preview.png';
+      coin.classList.add('rain-coin');
+      coin.style.left = Math.random() * 100 + '%';
+      coin.style.width = (30 + Math.random() * 20) + 'px';
+      document.body.appendChild(coin);
+      setTimeout(() => coin.remove(), 5000);
     }
 
-    setInterval(createCoin, 600);
+    setInterval(createRainCoin, 15000);
 
     // Bloquear desplazamiento táctil
     document.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
   </script>
 </body>
-      </html>
+</html>
