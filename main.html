@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>TapoBotX — Mining</title>
+<style>
+  :root{
+    --accent:#00eaff;
+    --bg1:#8ed0ff;
+    --bg2:#b9e3ff;
+    --text:#003366;
+  }
+  html,body{height:100%;margin:0;padding:0;overflow:hidden;font-family:Inter,Arial,sans-serif;background:linear-gradient(180deg,var(--bg1),var(--bg2));}
+  .clouds{position:fixed;inset:0;z-index:0;background:url('https://i.ibb.co/Fh3YZNR/sky-clouds.png') repeat-x; background-size:cover; opacity:0.45; animation:moveClouds 70s linear infinite;}
+  @keyframes moveClouds{0%{transform:translateX(0);}100%{transform:translateX(-40%);} }
+  .app{position:relative;z-index:2;height:100vh;display:flex;flex-direction:column;align-items:center;gap:12px;padding:18px 14px;box-sizing:border-box;}
+  .topbar{width:100%;display:flex;justify-content:space-between;align-items:center;}
+  .coin-wrap{display:flex;align-items:center;gap:10px;}
+  .coin{width:46px;height:46px;border-radius:50%;background:linear-gradient(90deg,#ffd54a,#ffb300);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,0.12);animation:spin 6s linear infinite;}
+  @keyframes spin{0%{transform:rotate(0);}100%{transform:rotate(360deg);}}
+  .balance{font-size:16px;color:var(--text);font-weight:600;}
+  .wallet-small{font-size:12px;color:#064; background:rgba(255,255,255,0.9);padding:6px 10px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+  .main-card{width:100%;max-width:480px;background:rgba(255,255,255,0.7);border-radius:18px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,0.12);display:flex;flex-direction:column;align-items:center;gap:14px;}
+  .robot{width:160px;filter:drop-shadow(0 8px 24px rgba(0,0,0,0.12));animation:float 3s ease-in-out infinite;}
+  @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+  .hash-display{font-size:14px;color:#063;margin-top:6px;}
+  .tap-btn{width:110px;height:110px;border-radius:999px;border:none;background:linear-gradient(180deg,var(--accent),#00ffcc);color:#001; font-weight:700;font-size:18px;box-shadow:0 12px 30px rgba(0,230,255,0.25);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+  .tap-btn:disabled{opacity:0.5;cursor:not-allowed;}
+  .energy{width:220px;height:10px;background:rgba(0,0,0,0.06);border-radius:10px;overflow:hidden;}
+  .energy-fill{height:100%;width:100%;background:linear-gradient(90deg,#ffd6a5,#ffd54a);transition:width 0.25s linear;}
+  .controls-row{display:flex;gap:10px;align-items:center;margin-top:6px;}
+  .collect-small{background:#fff;border-radius:8px;padding:6px 10px;border:1px solid rgba(0,0,0,0.06);cursor:pointer;font-size:12px;}
+  .menu{width:100%;display:flex;justify-content:space-around;margin-top:6px;}
+  .menu button{background:transparent;border:none;display:flex;flex-direction:column;align-items:center;color:var(--text);cursor:pointer;}
+  .menu button img{width:26px;height:26px;margin-bottom:6px;}
+  .profile-modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:white;padding:16px;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,0.2);z-index:999;display:none;min-width:260px;}
+  .close-btn{background:#eee;border-radius:8px;padding:6px 10px;border:none;cursor:pointer;}
+  .bottom-note{font-size:12px;color:#034;margin-top:6px;text-align:center;}
+  /* responsive */
+  @media (max-width:420px){
+    .main-card{padding:14px}
+    .robot{width:130px}
+    .tap-btn{width:90px;height:90px}
+  }
+</style>
+</head>
+<body>
+  <div class="clouds" aria-hidden="true"></div>
+
+  <div class="app">
+    <div class="topbar">
+      <div class="coin-wrap">
+        <div class="coin" title="TPBX">
+          <img src="https://cdn-icons-png.flaticon.com/512/833/833524.png" alt="coin" style="width:26px;">
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-start;">
+          <div class="balance" id="balanceText">0.00000000 TPBX</div>
+          <div class="hash-display" id="smallInfo">Unclaimed: 0.00000000</div>
+        </div>
+      </div>
+
+      <div class="wallet-small">Coming soon</div>
+    </div>
+
+    <div class="main-card" role="main" aria-live="polite">
+      <img id="robotImg" class="robot" src="https://github.com/user-attachments/assets/02ae68fc-3e99-41b7-8623-b84701da92ec" alt="TapoBotX Robot">
+
+      <div style="text-align:center;">
+        <div style="font-weight:700;color:#023">Tap to Mine</div>
+        <div style="font-size:13px;color:#055">Each tap: 0.00000001 TPBX</div>
+      </div>
+
+      <div>
+        <button id="tapBtn" class="tap-btn">⚡ TAP</button>
+      </div>
+
+      <div class="controls-row">
+        <div class="collect-small" id="collectBtn" title="Collect 1 TPBX" style="opacity:0.4;pointer-events:none;">Collect 1 TPBX</div>
+        <div style="width:8px"></div>
+        <div style="font-size:13px;color:#034">Energy</div>
+      </div>
+
+      <div class="energy" aria-hidden="true">
+        <div id="energyFill" class="energy-fill" style="width:100%"></div>
+      </div>
+
+      <div class="menu" role="navigation" aria-label="menu">
+        <button id="minersBtn"><img src="https://cdn-icons-png.flaticon.com/512/833/833314.png" alt=""><span style="font-size:12px">Miners</span></button>
+        <button id="refsBtn"><img src="https://cdn-icons-png.flaticon.com/512/565/565547.png" alt=""><span style="font-size:12px">Referrals</span></button>
+        <button id="tasksBtn"><img src="https://cdn-icons-png.flaticon.com/512/1250/1250615.png" alt=""><span style="font-size:12px">Tasks</span></button>
+        <button id="profileBtn"><img src="https://cdn-icons-png.flaticon.com/512/747/747376.png" alt=""><span style="font-size:12px">Profile</span></button>
+      </div>
+
+      <div class="bottom-note">Note: Withdrawals disabled. Play and build your balance.</div>
+    </div>
+  </div>
+
+  <!-- Profile modal -->
+  <div id="profileModal" class="profile-modal" role="dialog" aria-modal="true">
+    <div id="profileContent">
+      <h3>Profile</h3>
+      <div id="pName">Name: —</div>
+      <div id="pId">ID: —</div>
+      <div id="pTotal">Total: 0.00000000 TPBX</div>
+      <div id="pUnclaimed">Unclaimed: 0.00000000 TPBX</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end;">
+      <button class="close-btn" onclick="closeProfile()">Close</button>
+    </div>
+  </div>
+
+<script type="module">
+  // --- FIREBASE CONFIG HERE: replace with your project's config ---
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-app.js";
+  import { getDatabase, ref, get, set, child, update, onValue } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "REPLACE_API_KEY",
+    authDomain: "REPLACE_AUTH_DOMAIN",
+    databaseURL: "https://REPLACE_DB_URL.firebaseio.com",
+    projectId: "REPLACE_PROJECT_ID",
+    storageBucket: "REPLACE_BUCKET",
+    messagingSenderId: "REPLACE_SENDER",
+    appId: "REPLACE_APP_ID"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // Utility: parse URL params (Telegram webapp should pass tg_id and tg_name)
+  const params = new URLSearchParams(window.location.search);
+  const tg_id = params.get('tg_id') || params.get('tgId') || params.get('id') || ('guest_' + Math.floor(Math.random()*900000+100000));
+  const tg_name = params.get('tg_name') || params.get('tgName') || params.get('name') || ('Guest_'+tg_id);
+
+  // User DB path
+  const userPath = 'users/' + tg_id;
+
+  // initial local state
+  let state = {
+    id: tg_id,
+    name: tg_name,
+    total_balance: 0.0,   // TPBX collected permanently
+    unclaimed: 0.0,       // partial accumulation from taps
+    canTap: true,
+    energy: 100           // percent (max 100)
+  };
+
+  // numeric helpers
+  const toFixed8 = (n) => Number(n).toFixed(8);
+  const add = (a,b) => Math.round((Number(a)+Number(b))*1e8)/1e8; // safe add to 8 decimals
+  const sub = (a,b) => Math.round((Number(a)-Number(b))*1e8)/1e8;
+
+  // read or create user in Firebase
+  async function initUser(){
+    const dbRef = ref(db);
+    try{
+      const snap = await get(child(dbRef, userPath));
+      if (snap.exists()){
+        const u = snap.val();
+        state.total_balance = Number(u.total_balance || 0);
+        state.unclaimed = Number(u.unclaimed || 0);
+        state.canTap = ('canTap' in u) ? Boolean(u.canTap) : true;
+        state.energy = ('energy' in u) ? Number(u.energy) : 100;
+      } else {
+        // create new
+        const now = new Date().toISOString();
+        await set(ref(db, userPath), {
+          id: state.id,
+          name: state.name,
+          total_balance: state.total_balance,
+          unclaimed: state.unclaimed,
+          canTap: state.canTap,
+          energy: state.energy,
+          joinedAt: now
+        });
+      }
+      // subscribe to realtime changes (so if changed elsewhere it updates)
+      onValue(ref(db, userPath), (snapshot) => {
+        const val = snapshot.val();
+        if (!val) return;
+        state.total_balance = Number(val.total_balance || 0);
+        state.unclaimed = Number(val.unclaimed || 0);
+        state.canTap = ('canTap' in val) ? Boolean(val.canTap) : true;
+        state.energy = ('energy' in val) ? Number(val.energy) : 100;
+        render();
+      });
+    }catch(e){
+      console.error("Firebase init error", e);
+    }
+  }
+
+  // render UI
+  const balanceText = document.getElementById('balanceText');
+  const smallInfo = document.getElementById('smallInfo');
+  const tapBtn = document.getElementById('tapBtn');
+  const collectBtn = document.getElementById('collectBtn');
+  const energyFill = document.getElementById('energyFill');
+  const profileModal = document.getElementById('profileModal');
+
+  function render(){
+    const totalShown = (Number(state.total_balance) + Number(state.unclaimed));
+    balanceText.textContent = toFixed8(totalShown) + " TPBX";
+    smallInfo.textContent = "Unclaimed: " + toFixed8(state.unclaimed);
+    energyFill.style.width = Math.max(0, Math.min(100, state.energy)) + "%";
+    tapBtn.disabled = !state.canTap || state.energy <= 0;
+    // collect button condition
+    if (state.unclaimed >= 1.0){
+      collectBtn.style.opacity = '1';
+      collectBtn.style.pointerEvents = 'auto';
+    } else {
+      collectBtn.style.opacity = '0.4';
+      collectBtn.style.pointerEvents = 'none';
+    }
+  }
+
+  // TAP behavior
+  const TAP_INCREMENT = 0.00000001; // 1e-8
+  let tapCooldown = false;
+
+  tapBtn.addEventListener('click', async () => {
+    if (!state.canTap || state.energy <= 0) return;
+    // on each tap add increment to unclaimed
+    state.unclaimed = add(state.unclaimed, TAP_INCREMENT);
+    // reduce small energy per tap (example: 1% per tap)
+    state.energy = Math.max(0, state.energy - 0.2); // gentle drain
+    render();
+    // save small delta to DB (debounce to avoid many writes)
+    debounceSave();
+  });
+
+  // collect 1 TPBX button
+  collectBtn.addEventListener('click', async () => {
+    if (state.unclaimed < 1.0) return;
+    // require "watch ad" simulated modal
+    const confirmAd = confirm("To collect 1 TPBX you must watch an ad. Click OK when finished (simulated).");
+    if (!confirmAd) return;
+    // process collection: decrement unclaimed by 1, add to total_balance
+    state.unclaimed = sub(state.unclaimed, 1.0);
+    state.total_balance = add(state.total_balance, 1.0);
+    // after collecting, to keep rule "must watch ad to continue tapping", we will keep canTap true because we simulated ad already.
+    // If you want to lock tapping until another ad, set state.canTap = false and require another ad.
+    state.canTap = true;
+    await update(ref(db, userPath), {
+      total_balance: state.total_balance,
+      unclaimed: state.unclaimed,
+      canTap: state.canTap,
+      energy: state.energy
+    });
+    render();
+    alert("Collected 1 TPBX. Your balance updated.");
+  });
+
+  // profile modal
+  document.getElementById('profileBtn').addEventListener('click', () => {
+    document.getElementById('pName').textContent = "Name: " + state.name;
+    document.getElementById('pId').textContent = "ID: " + state.id;
+    document.getElementById('pTotal').textContent = "Total: " + toFixed8(state.total_balance) + " TPBX";
+    document.getElementById('pUnclaimed').textContent = "Unclaimed: " + toFixed8(state.unclaimed) + " TPBX";
+    profileModal.style.display = 'block';
+  });
+  function closeProfile(){ profileModal.style.display='none'; }
+
+  // placeholder menu navigation
+  document.getElementById('minersBtn').addEventListener('click', ()=> alert("Miners module coming soon"));
+  document.getElementById('refsBtn').addEventListener('click', ()=> alert("Referrals module coming soon"));
+  document.getElementById('tasksBtn').addEventListener('click', ()=> alert("Tasks module coming soon"));
+
+  // debounce small writes to DB to avoid flooding
+  let saveTimer = null;
+  function debounceSave(){
+    if(saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      update(ref(db, userPath), {
+        total_balance: state.total_balance,
+        unclaimed: state.unclaimed,
+        canTap: state.canTap,
+        energy: state.energy
+      }).catch(console.error);
+    }, 900); // 0.9s
+  }
+
+  // init
+  initUser().then(()=>{ render(); });
+
+  // prevent pinch/zoom on mobile (extra)
+  document.addEventListener('gesturestart', function (e) { e.preventDefault(); });
+
+</script>
+</body>
+</html>
