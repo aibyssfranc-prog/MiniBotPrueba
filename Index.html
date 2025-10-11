@@ -1,62 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TapoBotX — Loading</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TapoBotX — Initializing System</title>
+
   <style>
-    body {
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
+
+    * {
       margin: 0;
       padding: 0;
-      background: radial-gradient(circle at center, #00111f 0%, #000814 100%);
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      width: 100vw;
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      flex-direction: column;
+      background: radial-gradient(circle at center, #00111f 0%, #000814 100%);
       overflow: hidden;
       font-family: 'Orbitron', sans-serif;
       color: #00f0ff;
     }
 
-    .loader {
-      text-align: center;
-      animation: fadeIn 1s ease-in-out;
-    }
-
     .logo {
-      width: 150px;
-      animation: pulse 2s infinite alternate;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      animation: glow 2.5s ease-in-out infinite alternate, float 3s ease-in-out infinite;
     }
 
-    .text {
+    .title {
       margin-top: 20px;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       letter-spacing: 2px;
+      text-transform: uppercase;
+      animation: fadeIn 2s ease-in-out;
     }
 
-    @keyframes pulse {
-      0% { transform: scale(1); filter: drop-shadow(0 0 10px #00f0ff); }
-      100% { transform: scale(1.05); filter: drop-shadow(0 0 25px #00f0ff); }
+    .sub {
+      margin-top: 10px;
+      font-size: 0.95rem;
+      opacity: 0.8;
+      animation: fadeIn 2.5s ease-in-out;
+    }
+
+    .dots {
+      margin-top: 25px;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      background-color: #00f0ff;
+      border-radius: 50%;
+      animation: blink 1.4s infinite;
+    }
+
+    .dot:nth-child(2) {
+      animation-delay: 0.3s;
+    }
+
+    .dot:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+
+    /* Botones de redes sociales */
+    .socials {
+      position: absolute;
+      bottom: 50px;
+      display: flex;
+      gap: 20px;
+    }
+
+    .social-btn {
+      background: rgba(0, 255, 255, 0.1);
+      border: 1px solid #00f0ff;
+      color: #00f0ff;
+      padding: 10px 18px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .social-btn:hover {
+      background: #00f0ff;
+      color: #00111f;
+      transform: scale(1.1);
+      box-shadow: 0 0 20px #00f0ff;
+    }
+
+    @keyframes glow {
+      from {
+        filter: drop-shadow(0 0 10px #00f0ff);
+        transform: scale(1);
+      }
+      to {
+        filter: drop-shadow(0 0 30px #00f0ff);
+        transform: scale(1.05);
+      }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
 
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
     }
+
+    @keyframes blink {
+      0%, 80%, 100% { opacity: 0.2; }
+      40% { opacity: 1; }
+    }
   </style>
 </head>
 <body>
 
-  <div class="loader">
-    <img src="https://github.com/user-attachments/assets/67875c55-4a09-47c8-8241-bc14d1716c09" alt="TapoBotX Logo" class="logo">
-    <div class="text">Initializing TapoBotX System...</div>
+  <img 
+    src="https://github.com/user-attachments/assets/67875c55-4a09-47c8-8241-bc14d1716c09" 
+    alt="TapoBotX Logo" 
+    class="logo"
+  />
+
+  <div class="title">Initializing TapoBotX System</div>
+  <div class="sub">Please wait...</div>
+
+  <div class="dots">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+
+  <div class="socials">
+    <a href="" class="social-btn" target="_blank">Facebook</a>
+    <a href="" class="social-btn" target="_blank">YouTube</a>
+    <a href="" class="social-btn" target="_blank">TikTok</a>
   </div>
 
   <script>
-    // Redirige después de 3 segundos
+    // ⏳ Ahora el splash dura 5 segundos para permitir clics
     setTimeout(() => {
-      window.location.href = "main.html"; // página principal del panel de minería
-    }, 3000);
+      window.location.href = "main.html"; // cambia al panel principal
+    }, 5000);
   </script>
 
 </body>
