@@ -21,18 +21,20 @@
   }
 
   /* Fondo animado de nubes */
-  .cloud {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 200%;
-    height: 100%;
-    background: url('https://github.com/user-attachments/assets/cfc1b295-b82a-4e35-903e-304d740108c0') repeat-x;
-    background-size: contain;
-    animation: moveClouds 60s linear infinite;
-    opacity: 0.5;
-    z-index: 0;
-  }
+.cloud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background: url('https://github.com/user-attachments/assets/cfc1b295-b82a-4e35-903e-304d740108c0') repeat-x;
+  background-size: contain;
+  animation: moveClouds 60s linear infinite;
+  opacity: 0.6; /* más visible pero sin cubrir el azul */
+  z-index: 0;
+  background-color: transparent; /* 👈 deja pasar el fondo */
+  mix-blend-mode: lighten; /* 👈 suaviza el color */
+}
 
   @keyframes moveClouds {
     0% { transform: translateX(0); }
