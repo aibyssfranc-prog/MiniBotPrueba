@@ -21,15 +21,16 @@
   }
 
   /* Fondo animado de nubes */
-  .cloud {
+  .clouds {
     position: absolute;
     top: 0;
+    left: 0;
     width: 200%;
     height: 100%;
-    background: url('https://i.ibb.co/4ZpP7Hd/clouds.png') repeat-x;
-    background-size: contain;
+    background: url('https://i.ibb.co/Fh3YZNR/sky-clouds.png') repeat-x;
+    background-size: cover;
     animation: moveClouds 60s linear infinite;
-    opacity: 0.5;
+    opacity: 0.4;
     z-index: 0;
   }
 
@@ -38,22 +39,22 @@
     100% { transform: translateX(-50%); }
   }
 
-  /* Contador de usuarios */
+  /* Contador */
   .counter {
     position: absolute;
     top: 15px;
     font-weight: 600;
     font-size: 16px;
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.8);
     padding: 6px 16px;
     border-radius: 20px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     z-index: 2;
   }
 
-  /* Logo flotante */
+  /* Robot */
   .logo {
-    width: 120px;
+    width: 180px;
     animation: float 3s ease-in-out infinite;
     z-index: 2;
   }
@@ -65,8 +66,8 @@
 
   /* Texto principal */
   h1 {
-    margin-top: 20px;
-    font-size: 26px;
+    margin-top: 15px;
+    font-size: 28px;
     letter-spacing: 3px;
     font-weight: 700;
     z-index: 2;
@@ -136,7 +137,7 @@
 </head>
 
 <body>
-  <div class="cloud"></div>
+  <div class="clouds"></div>
 
   <div class="counter">
     👥 <span id="userCount">0</span> users joined
@@ -147,10 +148,10 @@
   <h1>COMING SOON...</h1>
 
   <div class="socials">
-    <a href="https://www.facebook.com/share/15Yy38Ja67/" target="_blank">
+    <a href="" target="_blank">
       <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook">
     </a>
-    <a href="https://youtube.com/@minibottpbx?si=uNmISDySw9YyIY5Y" target="_blank">
+    <a href="" target="_blank">
       <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube">
     </a>
     <a href="" target="_blank">
@@ -168,12 +169,11 @@
   </div>
 
   <script>
-    // Simulación del contador de usuarios que sube lentamente
-    let count = 1420;
+    // Simulación del contador de usuarios
+    let count = 1425;
     const countEl = document.getElementById('userCount');
-
     setInterval(() => {
-      count += Math.floor(Math.random() * 3) + 1;
+      count += Math.floor(Math.random() * 4) + 1;
       countEl.textContent = count.toLocaleString();
     }, 2000);
   </script>
