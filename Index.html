@@ -35,7 +35,7 @@
     100% { filter: brightness(1.25) contrast(1.2); transform: scale(1.03);}
   }
 
-  /* Monedas animadas */
+  /* Monedas flotantes */
   .coins {
     position: absolute;
     inset: 0;
@@ -47,25 +47,27 @@
   .coin {
     position: absolute;
     width: 50px;
-    opacity: 0.85;
-    animation: fall 8s linear infinite, rotate 4s ease-in-out infinite alternate, glow 3s ease-in-out infinite;
-    filter: drop-shadow(0 0 8px gold);
+    opacity: 0.9;
+    animation: rotate3D 8s linear infinite, floatAround 12s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 10px gold);
+    transform-style: preserve-3d;
   }
 
-  @keyframes fall {
-    0% { transform: translateY(-120px) rotate(0deg); opacity: 0; }
-    20% { opacity: 1; }
-    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  /* Giro 3D */
+  @keyframes rotate3D {
+    0% { transform: rotateY(0deg) rotateX(0deg) scale(1); }
+    50% { transform: rotateY(180deg) rotateX(15deg) scale(1.05); }
+    100% { transform: rotateY(360deg) rotateX(0deg) scale(1); }
   }
 
-  @keyframes rotate {
-    0% { transform: rotateY(0deg) scale(1); }
-    100% { transform: rotateY(360deg) scale(1.1); }
-  }
-
-  @keyframes glow {
-    0%,100% { filter: drop-shadow(0 0 8px gold) brightness(1.2); }
-    50% { filter: drop-shadow(0 0 15px #ffea75) brightness(1.4); }
+  /* Movimiento flotante en toda la pantalla */
+  @keyframes floatAround {
+    0% {
+      transform: translate(var(--start-x), var(--start-y));
+    }
+    100% {
+      transform: translate(var(--end-x), var(--end-y));
+    }
   }
 
   /* Contenedor principal */
@@ -197,38 +199,45 @@
   <script>
     const coinsContainer = document.getElementById('coins');
     const coinSrc = "./1000066477-removebg-preview.png";
-    const totalCoins = 8;
-    const coins = [];
+    const totalCoins = 10;
 
-    // Crear monedas iniciales
+    function randomRange(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    // Crear monedas que flotan en toda la pantalla
     for (let i = 0; i < totalCoins; i++) {
       const coin = document.createElement("img");
       coin.src = coinSrc;
       coin.className = "coin";
-      coin.style.left = Math.random() * 100 + "vw";
-      coin.style.animationDuration = (6 + Math.random() * 4) + "s";
+
+      const startX = randomRange(-10, 100) + "vw";
+      const startY = randomRange(-10, 100) + "vh";
+      const endX = randomRange(-10, 100) + "vw";
+      const endY = randomRange(-10, 100) + "vh";
+
+      coin.style.setProperty("--start-x", startX);
+      coin.style.setProperty("--start-y", startY);
+      coin.style.setProperty("--end-x", endX);
+      coin.style.setProperty("--end-y", endY);
+
+      coin.style.animationDuration = (10 + Math.random() * 10) + "s";
+      coin.style.animationDelay = Math.random() * 5 + "s";
       coin.style.width = (35 + Math.random() * 25) + "px";
-      coin.style.opacity = 0.7 + Math.random() * 0.3;
+
       coinsContainer.appendChild(coin);
-      coins.push(coin);
     }
 
-    // Mover monedas a nuevas posiciones cada 5 segundos
+    // Refrescar posición cada 15 segundos
     setInterval(() => {
-      coins.forEach(coin => {
-        coin.style.left = Math.random() * 100 + "vw";
+      document.querySelectorAll('.coin').forEach(coin => {
+        const endX = randomRange(-10, 100) + "vw";
+        const endY = randomRange(-10, 100) + "vh";
+        coin.style.setProperty("--start-x", coin.style.getPropertyValue("--end-x"));
+        coin.style.setProperty("--start-y", coin.style.getPropertyValue("--end-y"));
+        coin.style.setProperty("--end-x", endX);
+        coin.style.setProperty("--end-y", endY);
       });
-    }, 5000);
-
-    // Crear nuevas monedas cayendo cada 15 segundos
-    setInterval(() => {
-      const fallingCoin = document.createElement("img");
-      fallingCoin.src = coinSrc;
-      fallingCoin.className = "coin";
-      fallingCoin.style.left = Math.random() * 100 + "vw";
-      fallingCoin.style.animationDuration = (6 + Math.random() * 4) + "s";
-      coinsContainer.appendChild(fallingCoin);
-      setTimeout(() => fallingCoin.remove(), 10000);
     }, 15000);
   </script>
 </body>
