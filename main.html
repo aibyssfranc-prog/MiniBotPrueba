@@ -5,29 +5,24 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <title>TapoBotX — Mining</title>
 <style>
-:root{--accent:#00eaff;--text:#002b5c;}
-html,body{height:100%;margin:0;padding:0;overflow:hidden;font-family:Inter,sans-serif;}
-body{background:url('./IMG_20251011_155158_294.jpg') no-repeat center/cover;display:flex;align-items:center;justify-content:center;position:relative;}
-.overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.02));z-index:0;}
+:root{--accent:#00eaff;--text:#ffffff;}
+html,body{height:100%;margin:0;padding:0;overflow:hidden;font-family:Inter,sans-serif;background:#001f3f;}
+.overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.2),rgba(0,0,0,0.4));z-index:0;}
 .app{position:relative;z-index:3;width:100%;max-width:720px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:12px;}
 .topbar{width:100%;display:flex;justify-content:space-between;align-items:center;padding:6px 4px;}
-.coin-small{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.25);padding:6px 10px;border-radius:14px;backdrop-filter:blur(4px);}
-.coin-icon{width:36px;height:36px;background:url('./1000066477-removebg-preview.png') center/contain no-repeat;border-radius:50%;box-shadow:0 6px 18px rgba(0,0,0,0.18);animation:spinSlow 6s linear infinite;}
-@keyframes spinSlow{0%{transform:rotate(0);}100%{transform:rotate(360deg);}}
-.balance-text{font-weight:700;font-size:16px;color:#001f3f;}
-.small-unclaimed{font-size:12px;color:#034;opacity:0.95;}
-.wallet-small{display:flex;align-items:center;gap:4px;background:transparent;color:#001f3f;font-size:13px;padding:6px 8px;border-radius:10px;}
-.mine-center{margin-top:6px;width:86%;max-width:420px;background:rgba(255,255,255,0.0);border-radius:18px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:10px;}
-.mining-circle{width:220px;height:220px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,0.04), rgba(255,255,255,0.00) 60%);box-shadow:inset 0 -8px 30px rgba(0,0,0,0.12);position:relative;}
-.mining-icon{width:120px;height:120px;background:url('./1000066477-removebg-preview.png') center/contain no-repeat;z-index:2;}
-.tap-btn{position:absolute;bottom:10px;width:92px;height:92px;border-radius:999px;border:none;background:linear-gradient(180deg,var(--accent),#00ffcc);display:flex;align-items:center;justify-content:center;color:#001;font-weight:700;font-size:18px;cursor:pointer;box-shadow:0 12px 36px rgba(0,230,255,0.18);z-index:3;}
-.tap-btn:active{transform:scale(0.98);}
+.balance-text{font-weight:700;font-size:16px;color:var(--text);text-shadow:0 0 6px #000;}
+.small-unclaimed{font-size:12px;color:var(--text);opacity:0.9;text-shadow:0 0 4px #000;}
+.wallet-small{display:flex;align-items:center;gap:4px;color:var(--text);font-size:13px;padding:6px 8px;border-radius:10px;text-shadow:0 0 4px #000;}
+.mine-center{margin-top:6px;width:86%;max-width:420px;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.mining-circle{width:220px;height:220px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.05);position:relative;}
+.tap-btn{width:120px;height:120px;border-radius:999px;border:none;background:linear-gradient(180deg,#00eaff,#00ffcc);display:flex;align-items:center;justify-content:center;gap:8px;color:#001;font-weight:700;font-size:24px;cursor:pointer;box-shadow:0 12px 36px rgba(0,230,255,0.18);position:relative;z-index:2;}
+.tap-btn img{width:48px;height:48px;}
 .collect-small{position:absolute;left:12px;top:12px;background:rgba(255,255,255,0.9);padding:8px 10px;border-radius:8px;font-weight:600;font-size:13px;color:#003;box-shadow:0 6px 18px rgba(0,0,0,0.12);opacity:0.5;pointer-events:none;z-index:4;}
-.energy-bar{width:80%;height:10px;background:rgba(0,0,0,0.06);border-radius:10px;overflow:hidden;}
+.energy-bar{width:80%;height:10px;background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;}
 .energy-fill{height:100%;background:linear-gradient(90deg,#ffd6a5,#ffd54a);width:100%;transition:width .25s linear;}
-.bottom-menu{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);width:calc(100% - 40px);max-width:720px;display:flex;justify-content:space-around;gap:8px;z-index:6;pointer-events:auto;background: rgba(255,255,255,0.0);padding:8px 12px;}
-.menu-btn{display:flex;flex-direction:column;align-items:center;gap:6px;background:transparent;border:none;color:#001;cursor:pointer;width:64px;height:64px;border-radius:14px;}
-.menu-btn img{width:28px;height:28px;opacity:0.95;filter: drop-shadow(0 4px 8px rgba(0,0,0,0.12));}
+.bottom-menu{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);width:calc(100% - 40px);max-width:720px;display:flex;justify-content:space-around;gap:8px;z-index:6;pointer-events:auto;background: rgba(0,0,0,0.6);padding:8px 12px;border-radius:14px;box-shadow:0 4px 12px rgba(0,0,0,0.5);}
+.menu-btn{display:flex;flex-direction:column;align-items:center;gap:4px;background:rgba(255,255,255,0.1);border:none;color:var(--text);cursor:pointer;width:64px;height:64px;border-radius:14px;text-shadow:0 0 4px #000;box-shadow:0 4px 12px rgba(0,0,0,0.4);}
+.menu-btn img{width:28px;height:28px;}
 .tap-coin{position:absolute;width:36px;height:36px;background:url('./1000066477-removebg-preview.png') center/contain no-repeat;z-index:40;animation:riseAndFade 4s forwards;pointer-events:none;}
 @keyframes riseAndFade{0%{transform: translateY(0) scale(0.6);opacity:1;}40%{transform:translateY(-60px) scale(0.9);opacity:1;}100%{transform:translateY(-160px) scale(1.2);opacity:0;}}
 </style>
@@ -36,28 +31,25 @@ body{background:url('./IMG_20251011_155158_294.jpg') no-repeat center/cover;disp
 <div class="overlay"></div>
 <div class="app">
   <div class="topbar">
-    <div style="display:flex;align-items:center;gap:10px;">
-      <div class="coin-small"><div class="coin-icon"></div></div>
-      <div style="display:flex;flex-direction:column;">
-        <div class="balance-text" id="balanceText">0.00000000 TPBX</div>
-        <div class="small-unclaimed" id="smallUnclaimed">Unclaimed: 0.00000000</div>
-      </div>
+    <div style="display:flex;flex-direction:column;">
+      <div class="balance-text" id="balanceText">0.00000000 TPBX</div>
+      <div class="small-unclaimed" id="smallUnclaimed">Unclaimed: 0.00000000</div>
     </div>
     <div class="wallet-small">
-      <img src="./1000066477-removebg-preview.png" alt="wallet" style="width:18px;"> Coming soon
+      <img src="./1000066477-removebg-preview.png" alt="wallet"> Coming soon
     </div>
   </div>
   <div class="mine-center">
     <div class="mining-circle" id="miningCircle">
       <div class="collect-small" id="collectBtn">Collect 1 TPBX</div>
-      <div class="mining-icon"></div>
       <button id="tapBtn" class="tap-btn">
-        <div class="coin-icon"></div> TAP
+        <img src="./1000066477-removebg-preview.png" alt="TPBX">
+        TAP
       </button>
     </div>
     <div style="width:100%;display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:8px;">
       <div class="energy-bar"><div id="energyFill" class="energy-fill"></div></div>
-      <div style="font-size:12px;color:#012;opacity:0.9">Each tap: <strong>0.00000001 TPBX</strong></div>
+      <div style="font-size:12px;color:#fff;text-shadow:0 0 4px #000;">Each tap: <strong>0.00000001 TPBX</strong></div>
     </div>
   </div>
 </div>
@@ -68,7 +60,6 @@ body{background:url('./IMG_20251011_155158_294.jpg') no-repeat center/cover;disp
   <button class="menu-btn" id="profileBtn"><img src="https://cdn-icons-png.flaticon.com/512/747/747376.png"><div style="font-size:11px">Profile</div></button>
 </div>
 
-<!-- SCRIPT INTEGRADO -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-app.js";
 import { getDatabase, ref, set, update, onValue, get, child } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-database.js";
@@ -100,7 +91,6 @@ const energyFill = document.getElementById('energyFill');
 const tapBtn = document.getElementById('tapBtn');
 const collectBtn = document.getElementById('collectBtn');
 const miningCircle = document.getElementById('miningCircle');
-const tapCoinIcon = tapBtn.querySelector('.coin-icon');
 
 async function initUser() {
     try {
@@ -147,18 +137,11 @@ tapBtn.addEventListener('click', () => {
     state.unclaimed += TAP_AMOUNT;
     state.energy = Math.max(0, state.energy - 0.2);
     render();
-    animateTapCoin();
+    spawnTapCoin();
     update(ref(db, userPath), { unclaimed: state.unclaimed, energy: state.energy });
 });
 
-function animateTapCoin() {
-    tapCoinIcon.style.transform = 'scale(1.2) rotate(15deg)';
-    tapCoinIcon.style.filter = 'drop-shadow(0 0 12px rgba(0,255,255,0.8))';
-    setTimeout(() => {
-        tapCoinIcon.style.transform = 'scale(1) rotate(0deg)';
-        tapCoinIcon.style.filter = 'drop-shadow(0 6px 18px rgba(0,0,0,0.18))';
-    }, 200);
-
+function spawnTapCoin() {
     const coin = document.createElement('div');
     coin.className = 'tap-coin';
     const rect = miningCircle.getBoundingClientRect();
@@ -177,9 +160,7 @@ collectBtn.addEventListener('click', async () => {
     alert("Collected 1 TPBX!");
 });
 
-document.getElementById('profileBtn').addEventListener('click', () => {
-    window.location.href = `perfil.html?tg_id=${state.id}&tg_name=${state.name}&userCode=${userCode}`;
-});
+document.getElementById('profileBtn').addEventListener('click', () => { window.location.href = `perfil.html?tg_id=${state.id}&tg_name=${state.name}&userCode=${userCode}`; });
 document.getElementById('minersBtn').addEventListener('click', () => { alert("Miners page coming soon"); });
 document.getElementById('refsBtn').addEventListener('click', () => { alert("Referrals page coming soon"); });
 document.getElementById('tasksBtn').addEventListener('click', () => { alert("Tasks page coming soon"); });
