@@ -1,498 +1,197 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
-<title>TapoBotX — Mining</title>
+<meta charset="UTF-8" />
+<meta name="viewport" 
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>TapoBotX — Coming Soon</title>
 
 <style>
-  :root{
-    --accent: #00eaff;
-    --bg-overlay: rgba(0,0,0,0.0);
-    --text: #002b5c;
-  }
-
-  /* Prevent scroll/zoom */
-  html,body{height:100%;margin:0;padding:0;overflow:hidden;-ms-touch-action:none;touch-action:none;-webkit-user-select:none;user-select:none;}
-  body{
-    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    -webkit-font-smoothing:antialiased;
-    background: url('./IMG_20251011_155158_294.jpg') no-repeat center center fixed;
-    background-size: cover;
-    color: var(--text);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-height:100vh;
-    position:relative;
-  }
-
-  /* cloud overlay (soft blur so image still visible) */
-  .overlay{
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
-    z-index: 0;
-    pointer-events:none;
-  }
-
-  /* floating coins (decorative) */
-  .coin-fly {
-    position:absolute;
-    width:36px; height:36px;
-    background-image: url('./1000066477-removebg-preview.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    transform-origin:center;
-    animation: rotateCoin 3.5s linear infinite;
-    z-index: 1;
-    cursor:pointer;
-  }
-  @keyframes rotateCoin { 0%{transform:rotate(0);}100%{transform:rotate(360deg);} }
-
-  /* main app container */
-  .app {
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: "Poppins", sans-serif;
+    color: #0a3d62;
+    background: linear-gradient(to bottom, #8ed0ff, #b9e3ff);
     position: relative;
-    z-index: 3;
-    width:100%;
-    max-width:720px;
-    padding:18px;
-    box-sizing:border-box;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:12px;
+    touch-action: none;
   }
 
-  /* top bar */
-  .topbar{
-    width:100%;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:6px 4px;
-    box-sizing:border-box;
-  }
-  .coin-small {
-    display:flex;align-items:center;gap:10px;
-    background: rgba(255,255,255,0.25);
-    padding:6px 10px;border-radius:14px;backdrop-filter: blur(4px);
-  }
-  .coin-icon {
-    width:36px;height:36px;background:url('./1000066477-removebg-preview.png') center/contain no-repeat;border-radius:50%;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.18);
-    animation: spinSlow 6s linear infinite;
-  }
-  @keyframes spinSlow {0%{transform:rotate(0);}100%{transform:rotate(360deg);} }
-
-  .balance-text { font-weight:700; font-size:16px; color: #001f3f; }
-  .small-unclaimed { font-size:12px; color:#034; opacity:0.95; }
-
-  .wallet-small { background: transparent; color:#001f3f; font-size:13px; padding:6px 8px; border-radius:10px; }
-
-  /* central mining circle */
-  .mine-center {
-    margin-top:6px;
-    width:86%;
-    max-width:420px;
-    background: rgba(255,255,255,0.0); /* transparent — remove white */
-    border-radius:18px;
-    padding:18px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:10px;
-    box-sizing:border-box;
+  /* Fondo animado de nubes */
+  .cloud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    background: url('https://i.ibb.co/4ZpP7Hd/clouds.png') repeat-x;
+    background-size: contain;
+    animation: moveClouds 60s linear infinite;
+    opacity: 0.5;
+    z-index: 0;
   }
 
-  .mining-circle {
-    width:220px;
-    height:220px;
-    border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.04), rgba(255,255,255,0.00) 60%);
-    box-shadow: inset 0 -8px 30px rgba(0,0,0,0.12);
-    position:relative;
+  @keyframes moveClouds {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
   }
 
-  .mining-icon {
-    width:120px;height:120px;background:url('./1000066477-removebg-preview.png') center/contain no-repeat;
-    z-index:2;
-    pointer-events:none;
+  /* Contenedor principal centrado */
+  .container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
-  .tap-btn {
-    position:absolute;
-    bottom:10px;
-    width:92px;height:92px;border-radius:999px;border:none;background:linear-gradient(180deg,var(--accent),#00ffcc);
-    display:flex;align-items:center;justify-content:center;color:#001;font-weight:700;font-size:18px;cursor:pointer;
-    box-shadow:0 12px 36px rgba(0,230,255,0.18);
-    z-index:3;
-  }
-  .tap-btn:active{transform:scale(0.98);}
-
-  /* collect small button */
-  .collect-small {
-    position:absolute;
-    left:12px; top:12px;
-    background: rgba(255,255,255,0.9);
-    padding:8px 10px;border-radius:8px;font-weight:600;font-size:13px;color:#003;
-    box-shadow:0 6px 18px rgba(0,0,0,0.12);
-    opacity:0.5; pointer-events:none;
-    z-index:4;
+  /* Contador de usuarios */
+  .counter {
+    position: absolute;
+    top: 15px;
+    font-weight: 600;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 6px 16px;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   }
 
-  /* energy bar */
-  .energy-bar{ width:80%; height:10px; background: rgba(0,0,0,0.06); border-radius:10px; overflow:hidden; }
-  .energy-fill{ height:100%; background: linear-gradient(90deg,#ffd6a5,#ffd54a); width:100%; transition:width .25s linear; }
-
-  /* bottom fixed menu */
-  .bottom-menu {
-    position: fixed;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 40px);
-    max-width:720px;
-    display:flex;
-    justify-content:space-around;
-    gap:8px;
-    z-index:6;
-    pointer-events:auto;
-    background: rgba(255,255,255,0.0); /* transparent */
-    padding:8px 12px;
-    box-sizing:border-box;
-  }
-  .menu-btn {
-    display:flex;flex-direction:column;align-items:center;gap:6px;background:transparent;border:none;color:#001;cursor:pointer;
-    width:64px;height:64px;border-radius:14px;
-  }
-  .menu-btn img{ width:28px; height:28px; opacity:0.95; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.12)); }
-
-  /* profile modal */
-  .modal { position: fixed; left:50%; top:50%; transform:translate(-50%,-50%); background:white;padding:14px;border-radius:12px; box-shadow:0 12px 40px rgba(0,0,0,0.28); display:none; z-index:50; min-width:260px; }
-  .modal h3{ margin:0 0 8px 0; }
-  .btn-close{ margin-top:10px; padding:8px 12px; border-radius:8px; background:#eee; border:none; cursor:pointer; }
-
-  /* floating coin animation on tap */
-  .tap-coin {
-    position:absolute;
-    width:36px;height:36px;background:url('./1000066477-removebg-preview.png') center/contain no-repeat;
-    z-index: 40;
-    animation: riseAndFade 4s forwards;
-    pointer-events:none;
-  }
-  @keyframes riseAndFade {
-    0%{ transform: translateY(0) scale(0.6); opacity:1; }
-    40%{ transform: translateY(-60px) scale(0.9); opacity:1; }
-    100%{ transform: translateY(-160px) scale(1.2); opacity:0; }
+  /* Logo flotante */
+  .logo {
+    width: 160px;
+    max-width: 60%;
+    animation: float 3s ease-in-out infinite;
   }
 
-  /* responsive adjustments */
-  @media(max-width:420px){
-    .mining-circle{ width:180px; height:180px; }
-    .tap-btn{ width:78px;height:78px; bottom:8px; }
-    .collect-small{ left:8px; top:8px; padding:6px 8px; font-size:12px; }
-    .coin-fly{ width:30px;height:30px; }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  /* Texto principal */
+  h1 {
+    margin-top: 25px;
+    font-size: 24px;
+    letter-spacing: 3px;
+    font-weight: 700;
+  }
+
+  /* Redes sociales */
+  .socials {
+    margin-top: 25px;
+    display: flex;
+    gap: 18px;
+  }
+
+  .socials a {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease;
+  }
+
+  .socials a:active {
+    transform: scale(0.95);
+  }
+
+  .socials img {
+    width: 28px;
+  }
+
+  /* Telegram buttons */
+  .telegram-links {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .telegram-links a {
+    text-decoration: none;
+    background: #229ED9;
+    color: white;
+    font-weight: 600;
+    padding: 10px 30px;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+
+  .telegram-links a:active {
+    background: #1b8fc7;
+    transform: translateY(2px);
+  }
+
+  .telegram-links img {
+    width: 20px;
   }
 </style>
 </head>
+
 <body>
-  <!-- Firebase SDK modules will be loaded in the module script below -->
-  <div class="overlay"></div>
+  <div class="cloud"></div>
 
-  <div class="app" role="application" aria-label="TapoBotX Mining App">
-    <div class="topbar">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div class="coin-small" aria-hidden="false">
-          <div class="coin-icon" id="topCoinIcon" role="img" aria-label="TPBX coin"></div>
-        </div>
-
-        <div style="display:flex;flex-direction:column;">
-          <div class="balance-text" id="balanceText">0.00000000 TPBX</div>
-          <div class="small-unclaimed" id="smallUnclaimed">Unclaimed: 0.00000000</div>
-        </div>
-      </div>
-
-      <div class="wallet-small">
-        <img src="./1000066477-removebg-preview.png" alt="wallet" style="width:18px;vertical-align:middle;margin-right:6px;"> Coming soon
-      </div>
+  <div class="container">
+    <div class="counter">
+      👥 <span id="userCount">0</span> users joined
     </div>
 
-    <div class="mine-center" role="main" aria-live="polite">
-      <div class="mining-circle" id="miningCircle" aria-hidden="false">
-        <div class="collect-small" id="collectBtn">Collect 1 TPBX</div>
+    <img src="https://github.com/user-attachments/assets/02ae68fc-3e99-41b7-8623-b84701da92ec" 
+         alt="TapoBotX Logo" 
+         class="logo">
 
-        <div class="mining-icon" aria-hidden="true"></div>
+    <h1>COMING SOON...</h1>
 
-        <button id="tapBtn" class="tap-btn" aria-label="Tap to mine">⚡ TAP</button>
-      </div>
+    <div class="socials">
+      <a href="https://facebook.com" target="_blank">
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook">
+      </a>
+      <a href="https://youtube.com" target="_blank">
+        <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube">
+      </a>
+      <a href="https://tiktok.com" target="_blank">
+        <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" alt="TikTok">
+      </a>
+    </div>
 
-      <div style="width:100%;display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:8px;">
-        <div class="energy-bar" aria-hidden="true"><div id="energyFill" class="energy-fill" style="width:100%"></div></div>
-        <div style="font-size:12px;color:#012;opacity:0.9">Each tap: <strong>0.00000001 TPBX</strong></div>
-      </div>
+    <div class="telegram-links">
+      <a href="https://t.me/TapoBotXNews" target="_blank">
+        📰 Join TapoBotX News
+      </a>
+      <a href="https://t.me/TapoBotXChat" target="_blank">
+        💬 Join TapoBotX Chat
+      </a>
     </div>
   </div>
 
-  <!-- Bottom menu fixed -->
-  <div class="bottom-menu" role="navigation" aria-label="main menu">
-    <button class="menu-btn" id="minersBtn">
-      <img src="https://cdn-icons-png.flaticon.com/512/833/833314.png" alt="miners">
-      <div style="font-size:11px">Miners</div>
-    </button>
-    <button class="menu-btn" id="refsBtn">
-      <img src="https://cdn-icons-png.flaticon.com/512/565/565547.png" alt="refs">
-      <div style="font-size:11px">Referrals</div>
-    </button>
-    <button class="menu-btn" id="tasksBtn">
-      <img src="https://cdn-icons-png.flaticon.com/512/1250/1250615.png" alt="tasks">
-      <div style="font-size:11px">Tasks</div>
-    </button>
-    <button class="menu-btn" id="profileBtn">
-      <img src="https://cdn-icons-png.flaticon.com/512/747/747376.png" alt="profile">
-      <div style="font-size:11px">Profile</div>
-    </button>
-  </div>
+  <script>
+    // Simulación del contador de usuarios
+    let count = 1420;
+    const countEl = document.getElementById('userCount');
 
-  <!-- Profile modal -->
-  <div id="modalProfile" class="modal" role="dialog" aria-modal="true">
-    <h3>Profile</h3>
-    <div id="pf_name">Name: —</div>
-    <div id="pf_id">ID: —</div>
-    <div id="pf_total">Total: 0.00000000 TPBX</div>
-    <div id="pf_unclaimed">Unclaimed: 0.00000000</div>
-    <button class="btn-close" onclick="closeModal()">Close</button>
-  </div>
+    setInterval(() => {
+      count += Math.floor(Math.random() * 3) + 1;
+      countEl.textContent = count.toLocaleString();
+    }, 2000);
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-app.js";
-  import { getDatabase, ref, get, set, update, onValue, child } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-database.js";
-
-  // ----- FIREBASE CONFIG (you provided) -----
-  const firebaseConfig = {
-    apiKey: "AIzaSyDoNAVJdjlDr6qSj1r8-J1c4F6_k6BDqGw",
-    authDomain: "tapobox-34214.firebaseapp.com",
-    projectId: "tapobox-34214",
-    storageBucket: "tapobox-34214.firebasestorage.app",
-    messagingSenderId: "905512443769",
-    appId: "1:905512443769:web:4d3ffdeca37a3c591659a8",
-    measurementId: "G-LKJWMW8MNS"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-
-  // Parse URL params for Telegram WebApp (tg_id, tg_name) or fallback to guest
-  const params = new URLSearchParams(window.location.search);
-  const tg_id = params.get('tg_id') || params.get('tgId') || params.get('id') || ('guest_' + Math.floor(Math.random()*900000+100000));
-  const tg_name = params.get('tg_name') || params.get('tgName') || params.get('name') || ('Guest_' + tg_id);
-
-  const userPath = 'users/' + tg_id;
-
-  // Local state
-  let state = {
-    id: tg_id,
-    name: tg_name,
-    total_balance: 0.0,
-    unclaimed: 0.0,
-    energy: 100,
-    canTap: true
-  };
-
-  // helpers for decimals
-  const toFixed8 = (n)=> Number(n).toFixed(8);
-  const add = (a,b)=> Math.round((Number(a)+Number(b))*1e8)/1e8;
-  const sub = (a,b)=> Math.round((Number(a)-Number(b))*1e8)/1e8;
-
-  // UI refs
-  const balanceText = document.getElementById('balanceText');
-  const smallUnclaimed = document.getElementById('smallUnclaimed');
-  const energyFill = document.getElementById('energyFill');
-  const tapBtn = document.getElementById('tapBtn');
-  const collectBtn = document.getElementById('collectBtn');
-  const miningCircle = document.getElementById('miningCircle');
-  const modalProfile = document.getElementById('modalProfile');
-
-  // init: load or create user record, then subscribe
-  async function initUser(){
-    try{
-      const rootRef = ref(db);
-      const snap = await get(child(rootRef, userPath));
-      if (snap.exists()){
-        const u = snap.val();
-        state.total_balance = Number(u.total_balance || 0);
-        state.unclaimed = Number(u.unclaimed || 0);
-        state.energy = Number(u.energy || 100);
-        state.canTap = ('canTap' in u) ? Boolean(u.canTap) : true;
-      } else {
-        const now = new Date().toISOString();
-        await set(ref(db, userPath), {
-          id: state.id,
-          name: state.name,
-          total_balance: state.total_balance,
-          unclaimed: state.unclaimed,
-          energy: state.energy,
-          canTap: state.canTap,
-          joinedAt: now
-        });
-      }
-      // realtime subscription
-      onValue(ref(db, userPath), (snap) => {
-        const val = snap.val(); if(!val) return;
-        state.total_balance = Number(val.total_balance || 0);
-        state.unclaimed = Number(val.unclaimed || 0);
-        state.energy = Number(val.energy || 100);
-        state.canTap = ('canTap' in val) ? Boolean(val.canTap) : true;
-        render();
-      });
-    }catch(err){
-      console.error("initUser error", err);
-    }
-  }
-
-  // render UI
-  function render(){
-    const totalShown = add(state.total_balance, state.unclaimed);
-    balanceText.textContent = toFixed8(totalShown) + " TPBX";
-    smallUnclaimed.textContent = "Unclaimed: " + toFixed8(state.unclaimed);
-    energyFill.style.width = Math.max(0, Math.min(100, state.energy)) + "%";
-    tapBtn.disabled = !state.canTap || state.energy <= 0;
-    // collect button state
-    if (state.unclaimed >= 1.0){
-      collectBtn.style.opacity = '1';
-      collectBtn.style.pointerEvents = 'auto';
-    } else {
-      collectBtn.style.opacity = '0.45';
-      collectBtn.style.pointerEvents = 'none';
-    }
-  }
-
-  // Debounce DB writes
-  let saveTimer = null;
-  function saveStateDebounced(){
-    if(saveTimer) clearTimeout(saveTimer);
-    saveTimer = setTimeout(()=> {
-      update(ref(db, userPath), {
-        total_balance: state.total_balance,
-        unclaimed: state.unclaimed,
-        energy: state.energy,
-        canTap: state.canTap
-      }).catch(err=>console.error("save error",err));
-    }, 900);
-  }
-
-  // Tap logic
-  const TAP_AMOUNT = 0.00000001;
-  tapBtn.addEventListener('click', () => {
-    if(!state.canTap || state.energy <= 0) return;
-    // add small increment
-    state.unclaimed = add(state.unclaimed, TAP_AMOUNT);
-    // reduce energy slightly
-    state.energy = Math.max(0, state.energy - 0.2);
-    render();
-    // spawn tap coin animation
-    spawnTapCoin();
-    saveStateDebounced();
-  });
-
-  // spawn animation coin (rises and fades 4s)
-  function spawnTapCoin(){
-    const coin = document.createElement('div');
-    coin.className = 'tap-coin';
-    // position near center of mining circle
-    const rect = miningCircle.getBoundingClientRect();
-    coin.style.left = (rect.left + rect.width/2 - 18) + 'px';
-    coin.style.top = (rect.top + rect.height/2 - 18) + 'px';
-    document.body.appendChild(coin);
-    setTimeout(()=> coin.remove(), 4200);
-  }
-
-  // collect 1 TPBX (requires ad simulation)
-  collectBtn.addEventListener('click', async () => {
-    if (state.unclaimed < 1.0) return;
-    const ok = confirm("To collect 1 TPBX you must watch an ad (simulation). Click OK when finished.");
-    if(!ok) return;
-    // perform collection
-    state.unclaimed = sub(state.unclaimed, 1.0);
-    state.total_balance = add(state.total_balance, 1.0);
-    // optionally require another ad to continue tapping — here we let them continue since they just watched
-    state.canTap = true;
-    await update(ref(db, userPath), {
-      total_balance: state.total_balance,
-      unclaimed: state.unclaimed,
-      canTap: state.canTap,
-      energy: state.energy
-    });
-    render();
-    alert("Collected 1 TPBX. Balance updated.");
-  });
-
-  // Small floating coins that give 0.05 TPBX when clicked (ad simulation)
-  const COIN_REWARD = 0.05;
-  const NUM_FLOAT_COINS = 8;
-  function createFloatingCoins(){
-    // remove existing
-    document.querySelectorAll('.coin-fly').forEach(n=>n.remove());
-    const ww = window.innerWidth, wh = window.innerHeight;
-    for(let i=0;i<NUM_FLOAT_COINS;i++){
-      const c = document.createElement('div');
-      c.className = 'coin-fly';
-      // random positions across viewport
-      const left = 6 + Math.random() * (ww - 80);
-      const top = 80 + Math.random() * (wh - 220);
-      c.style.left = left + 'px';
-      c.style.top = top + 'px';
-      // optional different rotation speeds
-      c.style.animationDuration = (3 + Math.random()*2.5) + 's';
-      c.title = "Tap for 0.05 TPBX (watch ad)";
-      c.addEventListener('click', async (e)=>{
-        e.stopPropagation();
-        // simulate ad
-        const ok = confirm("Watch an ad to get +0.05 TPBX (simulation). Click OK when finished.");
-        if(!ok) return;
-        // give reward and save
-        state.total_balance = add(state.total_balance, COIN_REWARD);
-        await update(ref(db, userPath), { total_balance: state.total_balance }).catch(console.error);
-        render();
-        // small pulse feedback
-        c.style.transform = "scale(0.7)";
-        setTimeout(()=> c.style.transform = "scale(1)", 400);
-      }, {passive:false});
-      document.body.appendChild(c);
-    }
-  }
-
-  // profile modal open/close
-  document.getElementById('profileBtn').addEventListener('click', ()=>{
-    document.getElementById('pf_name').textContent = "Name: " + state.name;
-    document.getElementById('pf_id').textContent = "ID: " + state.id;
-    document.getElementById('pf_total').textContent = "Total: " + toFixed8(state.total_balance) + " TPBX";
-    document.getElementById('pf_unclaimed').textContent = "Unclaimed: " + toFixed8(state.unclaimed) + " TPBX";
-    modalProfile.style.display = 'block';
-  });
-  function closeModal(){ modalProfile.style.display = 'none'; }
-
-  // placeholder menu actions
-  document.getElementById('minersBtn').addEventListener('click', ()=> alert("Miners coming soon"));
-  document.getElementById('refsBtn').addEventListener('click', ()=> alert("Referrals coming soon"));
-  document.getElementById('tasksBtn').addEventListener('click', ()=> alert("Tasks coming soon"));
-
-  // init app
-  initUser().then(()=>{
-    render();
-    createFloatingCoins();
-  });
-
-  // prevent pinch/zoom
-  document.addEventListener('gesturestart', (e)=> e.preventDefault());
-
-  // update coin positions on resize (recreate)
-  window.addEventListener('resize', ()=> {
-    document.querySelectorAll('.coin-fly').forEach(n=>n.remove());
-    createFloatingCoins();
-  });
-
-</script>
+    // Bloquear desplazamiento con gestos táctiles
+    document.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+  </script>
 </body>
 </html>
