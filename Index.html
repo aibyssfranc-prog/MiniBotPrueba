@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TapoBotX — Loading</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at center, #00111f 0%, #000814 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Orbitron', sans-serif;
+      color: #00f0ff;
+    }
+
+    .loader {
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .logo {
+      width: 150px;
+      animation: pulse 2s infinite alternate;
+    }
+
+    .text {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); filter: drop-shadow(0 0 10px #00f0ff); }
+      100% { transform: scale(1.05); filter: drop-shadow(0 0 25px #00f0ff); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="loader">
+    <img src="logo_tpbx.png" alt="TapoBotX Logo" class="logo">
+    <div class="text">Initializing TapoBotX System...</div>
+  </div>
+
+  <script>
+    // Redirige después de 3 segundos
+    setTimeout(() => {
+      window.location.href = "main.html"; // página principal del panel de minería
+    }, 3000);
+  </script>
+
+</body>
+</html>
