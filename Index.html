@@ -27,15 +27,14 @@
   left: 0;
   width: 200%;
   height: 100%;
-  background: url('https://i.ibb.co/Wt1vQkT/clouds.png') repeat-x;
-  background-size: 900px auto; /* tamaño de nubes visible */
+  background: url('https://i.ibb.co/1mR7WjM/clouds-transparent.png') repeat-x;
+  background-size: 800px auto;
   animation: moveClouds 60s linear infinite;
-  opacity: 0.7; /* un poco más visible */
+  opacity: 0.7;
   z-index: 0;
   background-color: transparent;
-  filter: brightness(1.15) contrast(0.95); /* tono suave */
+  filter: brightness(1.1) contrast(0.9);
 }
-
 @keyframes moveClouds {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
